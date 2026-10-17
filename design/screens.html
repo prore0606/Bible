@@ -1,0 +1,1030 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>성경-말씀숲 화면 흐름</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root{
+    --green:#36B37E; --green2:#4CC38A; --green-l:#E5F7EE; --deep:#191F28;
+    --grape:#7C5CDB; --grape-l:#A58BF0; --cream1:#FFF8EC; --cream2:#FFE9B8; --butter:#FFF4DC; --gold:#FFB938;
+    --ink:#191F28; --blue:#3182F6; --blue-tint:#E8F3FF; --brand:#F5A623; --hl:#FFF3C4; --gray:#8B95A1; --line:#EEF0F3; --bg:#F4F5F7;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:Pretendard,-apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink);
+    background:linear-gradient(180deg,#FFFDF8 0%,var(--cream1) 25%,var(--cream2) 100%);background-attachment:fixed;
+    -webkit-font-smoothing:antialiased}
+  .page{max-width:1280px;margin:0 auto;padding:56px 24px 80px}
+
+  /* header */
+  .top{display:flex;gap:18px;align-items:center}
+  .top svg{width:56px;height:56px;flex:none}
+  .top h1{font-size:40px;font-weight:800;letter-spacing:-1.2px}
+  .top h1 span{color:var(--green)}
+  .lead{font-size:18px;color:#4E5968;margin-top:12px;line-height:1.6}
+  .flow{display:flex;flex-wrap:wrap;gap:8px;margin-top:22px;align-items:center}
+  .flow .f{background:#fff;border-radius:999px;padding:9px 16px;font-size:14px;font-weight:600;color:var(--deep);
+    box-shadow:0 4px 14px rgba(120,90,30,.08)}
+  .flow .a{color:#F5A623;font-weight:700}
+  .note{margin-top:18px;display:inline-block;background:rgba(255,255,255,.7);border:1px dashed #FFD98A;border-radius:14px;
+    padding:12px 16px;font-size:14px;color:#A86A0E;line-height:1.6}
+  .note b{color:var(--blue)}
+
+  /* sections */
+  section{margin-top:64px}
+  .sh{display:flex;align-items:baseline;gap:12px;flex-wrap:wrap}
+  .sh .no{font-size:14px;font-weight:800;color:#fff;background:var(--blue);border-radius:999px;padding:4px 12px}
+  .sh h2{font-size:26px;font-weight:800;letter-spacing:-.6px}
+  .sh p{font-size:15px;color:var(--gray)}
+  .row{display:flex;flex-wrap:wrap;gap:36px 28px;margin-top:28px}
+  .item{width:280px}
+  .cap{margin-top:16px}
+  .cap .n{font-size:13px;font-weight:800;color:var(--grape)}
+  .cap h3{font-size:17px;font-weight:700;margin-top:2px;letter-spacing:-.3px}
+  .cap p{font-size:13.5px;color:var(--gray);margin-top:4px;line-height:1.55}
+
+  /* phone */
+  .phone{position:relative;width:280px;height:586px;border-radius:46px;padding:9px;
+    background:linear-gradient(145deg,#F4F4F2,#C9CBCC 40%,#EDEDEB 60%,#B9BBBC);
+    box-shadow:0 26px 50px rgba(110,80,20,.18),0 6px 14px rgba(110,80,20,.10), inset 0 0 0 1.5px #9EA1A3}
+  .phone::before{content:"";position:absolute;inset:5px;border-radius:41px;background:#111}
+  .screen{position:relative;width:100%;height:100%;border-radius:37px;overflow:hidden;background:var(--bg);font-size:12px}
+  .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:108px;height:24px;background:#111;border-radius:0 0 15px 15px;z-index:9}
+  .status{display:flex;justify-content:space-between;align-items:center;padding:10px 22px 0 26px;height:32px;font-size:11px;font-weight:700;position:relative;z-index:8}
+  .status i{display:flex;gap:4px;align-items:center}
+
+  /* common blocks */
+  .hd{display:flex;justify-content:space-between;align-items:center;padding:12px 16px 8px}
+  .brand{display:flex;align-items:center;gap:5px;font-weight:800;font-size:15px;letter-spacing:-.4px}
+  .pill{font-size:10px;color:var(--gray);background:#F2F4F6;border-radius:999px;padding:4px 9px}
+  .ttl{font-size:15px;font-weight:700;letter-spacing:-.3px}
+  .back{font-size:15px;font-weight:700;display:flex;align-items:center;gap:6px}
+  .body{padding:0 16px}
+  .btn{display:flex;align-items:center;justify-content:center;width:100%;height:46px;border-radius:14px;border:0;
+    background:var(--blue);color:#fff;font-family:inherit;font-weight:700;font-size:13.5px}
+  .btn.ghost{background:transparent;color:var(--gray);font-weight:500;font-size:12px;height:30px}
+  .bottom{position:absolute;left:16px;right:16px;bottom:22px}
+  .card{background:#fff;border-radius:16px;padding:12px;box-shadow:0 1px 2px rgba(0,0,0,.03),0 4px 14px rgba(0,0,0,.04)}
+  .banner{background:var(--butter);border-radius:14px;padding:12px 14px;display:flex;justify-content:space-between;align-items:center}
+  .banner p{font-size:11.5px;color:#E8971A;line-height:1.5;font-weight:600}
+  .banner p b{color:var(--grape)}
+  .dots{display:flex;gap:6px;justify-content:center}
+  .dots span{width:6px;height:6px;border-radius:3px;background:#E5E8EB}
+  .dots span.on{width:16px;background:var(--green)}
+  h4{font-size:19px;font-weight:800;letter-spacing:-.6px;line-height:1.4}
+  .sub{font-size:12px;color:var(--gray);line-height:1.6;margin-top:6px}
+  .center{text-align:center}
+
+  /* tabs */
+  .tabs{position:absolute;left:0;right:0;bottom:0;height:62px;background:#fff;border-top:1px solid var(--line);
+    display:flex;justify-content:space-around;padding-top:8px}
+  .tab{display:flex;flex-direction:column;align-items:center;gap:2px;font-size:9px;color:#B0B8C1}
+  .tab.on{color:var(--brand);font-weight:700}
+  .tab svg{width:18px;height:18px}
+
+  /* home */
+  .grid{display:grid;grid-template-columns:1.1fr 1fr;gap:7px;margin-top:8px}
+  .tall{grid-row:span 2;display:flex;flex-direction:column;justify-content:space-between}
+  .t{font-size:12.5px;font-weight:700;line-height:1.35}
+  .s{font-size:10px;color:var(--gray);margin-top:3px}
+  .v{font-size:11px;font-weight:700;color:var(--blue)}
+  .bar{height:5px;background:#EEF0F3;border-radius:3px;margin-top:5px;overflow:hidden}
+  .bar i{display:block;height:100%;background:var(--blue);border-radius:3px}
+  .mini{display:flex;justify-content:space-between;align-items:center}
+  .mini .nn{font-size:11px;font-weight:700;color:var(--grape)}
+  .gbox{margin-top:8px;background:linear-gradient(135deg,var(--green2),var(--green));border-radius:16px;padding:14px;color:#fff;position:relative;overflow:hidden;min-height:104px}
+  .gbox .k{font-size:10px;opacity:.85}
+  .gbox .q{font-size:14px;font-weight:700;line-height:1.45;margin-top:6px}
+  .gbox .r{font-size:10px;opacity:.8;margin-top:4px}
+  .gbox svg{position:absolute;right:4px;bottom:-6px;width:78px;height:78px}
+  .list{margin-top:8px;padding:2px 12px}
+  .li{display:flex;align-items:center;gap:8px;padding:8px 0;font-size:11.5px;font-weight:600}
+  .li+.li{border-top:1px solid var(--line)}
+  .ck{width:18px;height:18px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none}
+  .ck.done{background:var(--blue)} .ck.todo{border:2px solid #D1D6DB}
+  .li .rt{margin-left:auto;font-size:10px;color:var(--gray);font-weight:500}
+  .li .go{margin-left:auto;font-size:10.5px;color:var(--blue);font-weight:700}
+
+  /* reading */
+  .step{display:flex;gap:4px;padding:0 16px;margin-top:2px}
+  .step span{flex:1;height:4px;border-radius:2px;background:#E5E8EB}
+  .step span.on{background:var(--blue)}
+  .steplabel{font-size:10px;color:var(--blue);font-weight:700;padding:6px 16px 0}
+  .verses{padding:10px 16px 0}
+  .vs{display:flex;gap:7px;font-family:"Nanum Myeongjo","KoPub Batang",serif;font-size:13px;line-height:1.75;padding:4px 6px;border-radius:8px;margin:0 -6px}
+  .vs b{font-family:Pretendard,sans-serif;font-size:10px;color:var(--green);font-weight:800;padding-top:3px;min-width:10px}
+  .vs.sel{background:var(--green-l);box-shadow:inset 0 0 0 1.5px var(--green)}
+  .vs.dim{opacity:.45}
+  .chap{font-size:20px;font-weight:800;padding:8px 16px 0;letter-spacing:-.5px}
+  .fade{position:absolute;left:0;right:0;bottom:96px;height:40px;background:linear-gradient(transparent,var(--bg));pointer-events:none}
+  .langbox{padding:8px 16px 0}
+  .langlbl{font-size:9.5px;color:var(--gray);margin-bottom:5px}
+  .langs{display:flex;gap:6px}
+  .lg{flex:1;height:28px;border-radius:999px;border:1.5px solid #E5E8EB;background:#fff;font-family:inherit;font-size:11.5px;font-weight:600;color:#8B95A1;cursor:pointer}
+  .lg.on{background:var(--blue);border-color:var(--blue);color:#fff}
+  .lg.on::before{content:"✓ ";font-weight:800}
+  .scroll{position:absolute;left:0;right:0;top:166px;bottom:96px;overflow-y:auto;scrollbar-width:none}
+  .scroll::-webkit-scrollbar{display:none}
+  .vs .en{display:block;font-family:Pretendard,sans-serif;font-size:11px;color:#6B7684;line-height:1.55;margin-top:2px}
+  .vs .ko+.en{margin-top:3px}
+  .vs.pair{padding:7px 6px;border-bottom:1px solid var(--line);border-radius:0}
+  #readVerses .vs{cursor:pointer;position:relative;padding-right:18px}
+  #readVerses .vs.saved{background:var(--hl)}
+  #readVerses .vs.saved::after{content:"";position:absolute;right:4px;top:8px;width:9px;height:12px;background:var(--brand);
+    clip-path:polygon(0 0,100% 0,100% 100%,50% 72%,0 100%)}
+  .toast{position:absolute;left:50%;bottom:130px;transform:translate(-50%,10px);background:rgba(31,42,36,.92);color:#fff;font-size:11px;
+    padding:7px 12px;border-radius:999px;opacity:0;transition:.25s;white-space:nowrap;z-index:7;pointer-events:none}
+  .toast.show{opacity:1;transform:translate(-50%,0)}
+  .savedchip{display:flex;align-items:center;gap:6px;margin-top:6px;background:#fff;border:1.5px solid #FFD98A;background:#FFFBEF;border-radius:10px;padding:8px 10px;
+    font-family:"Nanum Myeongjo",serif;font-size:11.5px;font-weight:700;color:var(--deep)}
+
+  /* first setup: book & chapter */
+  .setstep{font-size:10px;font-weight:800;color:var(--grape);margin-bottom:4px}
+  .testa{display:flex;background:#F2F4F6;border-radius:10px;padding:3px;margin-top:10px}
+  .testa button{flex:1;border:0;background:none;font-family:inherit;font-size:11.5px;font-weight:600;color:var(--gray);height:28px;border-radius:8px;cursor:pointer}
+  .testa button.on{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(0,0,0,.08)}
+  .books{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px;max-height:112px;overflow-y:auto;scrollbar-width:none}
+  .books::-webkit-scrollbar,.chaps::-webkit-scrollbar,.col::-webkit-scrollbar{display:none}
+  .books button{border:1.5px solid #E5E8EB;background:#fff;border-radius:999px;font-family:inherit;font-size:11px;padding:5px 9px;cursor:pointer;color:#4E5968}
+  .books button.on{border-color:var(--blue);background:var(--blue);color:#fff;font-weight:700}
+  .chaps{display:grid;grid-template-columns:repeat(6,1fr);gap:5px;margin-top:6px;max-height:150px;overflow-y:auto;scrollbar-width:none}
+  .chaps button{aspect-ratio:1;border:0;background:#fff;border-radius:9px;font-family:inherit;font-size:11.5px;font-weight:600;color:#4E5968;cursor:pointer;
+    box-shadow:0 1px 4px rgba(80,60,20,.06)}
+  .chaps button.on{background:var(--blue);color:#fff}
+  .pick{display:flex;justify-content:space-between;align-items:center;background:var(--butter);border-radius:10px;padding:9px 12px;margin-bottom:8px;font-size:11px;color:#D18412}
+  .pick b{font-size:13px;color:var(--ink)}
+
+  /* alarm wheel */
+  .wheel{position:relative;display:flex;justify-content:center;align-items:center;gap:4px;height:150px;margin-top:14px;background:#fff;border-radius:16px;
+    box-shadow:0 2px 10px rgba(80,60,20,.06);overflow:hidden}
+  .wheel .hl{position:absolute;left:10px;right:10px;top:55px;height:40px;background:var(--blue-tint);border-radius:10px}
+  .col{position:relative;height:150px;width:58px;overflow-y:auto;scroll-snap-type:y mandatory;scrollbar-width:none;
+    mask-image:linear-gradient(transparent,#000 30%,#000 70%,transparent);-webkit-mask-image:linear-gradient(transparent,#000 30%,#000 70%,transparent)}
+  .col div{height:40px;line-height:40px;text-align:center;font-size:19px;font-weight:700;scroll-snap-align:center;color:#C5CBD2;cursor:pointer}
+  .col div.on{color:var(--deep)}
+  .col .pad{height:55px;scroll-snap-align:none}
+  #wAp div{font-size:14px}
+  .colon{position:relative;font-size:20px;font-weight:800;color:var(--deep)}
+  #quick span{cursor:pointer}
+  .alarmprev{display:flex;gap:8px;align-items:center;margin-top:12px;background:var(--butter);border-radius:12px;padding:9px 11px}
+  .alarmprev b{display:block;font-size:12px}
+  .alarmprev span{font-size:10.5px;color:#D18412}
+
+  /* ads */
+  .adtop{display:flex;justify-content:space-between;align-items:center;padding:12px 16px}
+  .adtag{font-size:10px;font-weight:700;color:#191F28;background:#FFB938;border-radius:4px;padding:2px 6px}
+  .adtag.sm{font-size:8.5px;padding:1px 4px;margin-right:6px}
+  .adclose{border:0;background:rgba(255,255,255,.14);color:#fff;font-family:inherit;font-size:11px;font-weight:600;border-radius:999px;padding:6px 11px;cursor:pointer}
+  .adarea{margin:10px 16px 0;height:330px;border:1.5px dashed #4A504C;border-radius:16px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;color:#9AA19C}
+  .adarea b{font-size:14px;color:#D9DED9}
+  .adarea span{font-size:10.5px}
+  .adfoot{position:absolute;left:16px;right:16px;bottom:28px;display:flex;gap:9px;align-items:center;background:rgba(255,255,255,.08);border-radius:12px;padding:10px 12px;
+    color:#E8ECE8;font-size:11px;line-height:1.5}
+  .adbanner{position:absolute;left:12px;right:12px;bottom:70px;height:40px;border:1.5px dashed #D1D6DB;border-radius:8px;background:#F7F8FA;
+    display:flex;align-items:center;justify-content:center;font-size:10px;color:#8B95A1}
+  .revive{display:flex;justify-content:space-between;align-items:center;gap:8px;margin-top:8px;background:var(--butter);border-radius:14px;padding:11px 12px}
+  .revive b{display:block;font-size:12px}
+  .revive span{font-size:10px;color:#D18412}
+  .revive button{flex:none;border:0;background:var(--grape);color:#fff;font-family:inherit;font-size:11px;font-weight:700;border-radius:999px;padding:7px 11px}
+
+  /* choose / pray */
+  .vcard{background:linear-gradient(135deg,var(--green2),var(--green));color:#fff;border-radius:14px;padding:14px}
+  .vcard .q{font-family:"Nanum Myeongjo",serif;font-size:14px;line-height:1.6;font-weight:700}
+  .vcard .r{font-size:10px;opacity:.85;margin-top:6px}
+  .area{margin-top:10px;background:#fff;border:1.5px solid var(--blue);border-radius:14px;padding:12px;min-height:110px;font-size:13px;line-height:1.6}
+  .area .cur{display:inline-block;width:1.5px;height:14px;background:var(--blue);vertical-align:-2px;margin-left:1px;animation:blink 1s steps(1) infinite}
+  @keyframes blink{50%{opacity:0}}
+  .count{text-align:right;font-size:10px;color:var(--gray);margin-top:4px}
+  .hint{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+  .hint span{font-size:10.5px;background:#F2F4F6;color:#6B7684;border-radius:999px;padding:5px 9px}
+
+  /* sheet */
+  .dimbg{position:absolute;inset:0;background:rgba(30,30,25,.38);z-index:5}
+  .sheet{position:absolute;left:0;right:0;bottom:0;height:372px;background:#fff;border-radius:24px 24px 0 0;z-index:6;padding:22px 18px 0}
+  .sheet .x{position:absolute;right:18px;top:18px;font-size:15px;color:#555}
+  .grab{width:32px;height:4px;border-radius:2px;background:#E5E8EB;margin:-10px auto 14px}
+
+  /* option cards */
+  .opt{display:flex;justify-content:space-between;align-items:center;background:#fff;border-radius:14px;padding:13px 14px;margin-top:8px;
+    border:1.5px solid transparent;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+  .opt.on{border-color:var(--blue);background:#F3F8FF}
+  .opt .t2{font-size:13px;font-weight:700} .opt .s2{font-size:10.5px;color:var(--gray);margin-top:2px}
+  .radio{width:18px;height:18px;border-radius:50%;border:2px solid #D1D6DB;flex:none}
+  .opt.on .radio{border:5px solid var(--blue)}
+  .chips{display:flex;gap:6px;margin-top:8px}
+  .chips span{flex:1;text-align:center;font-size:11.5px;font-weight:600;background:#fff;border-radius:10px;padding:9px 0;box-shadow:0 2px 8px rgba(80,60,20,.05)}
+  .chips span.on{background:var(--blue);color:#fff}
+  .lbl{font-size:12px;font-weight:700;margin-top:16px;color:#4E5968}
+
+  /* login */
+  .sns{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:44px;border-radius:12px;font-weight:700;font-size:13px;margin-top:8px}
+  .kakao{background:#FEE500;color:#191600}
+  .google{background:#fff;color:#191F28;border:1px solid #DADCE0}
+  .guest{background:var(--blue);color:#fff}
+
+  /* vineyard */
+  .stagebox{margin-top:6px;background:linear-gradient(180deg,#FFF6DD,#FFE9B8);border-radius:18px;height:214px;position:relative;overflow:hidden}
+  .stagebox svg{position:absolute;inset:0;width:100%;height:100%}
+  .stagetabs{display:flex;justify-content:space-between;margin-top:10px;position:relative}
+  .stagetabs::before{content:"";position:absolute;left:10px;right:10px;top:9px;height:2px;background:#E5E8EB}
+  .st{position:relative;display:flex;flex-direction:column;align-items:center;gap:5px;font-size:9.5px;color:var(--gray);cursor:pointer;background:none;border:0;font-family:inherit;width:40px}
+  .st i{width:14px;height:14px;border-radius:50%;background:#E5E8EB;border:3px solid var(--bg);box-sizing:content-box;margin-top:-1px}
+  .st.past i{background:var(--green)}
+  .st.on i{background:var(--green);box-shadow:0 0 0 3px var(--green-l)}
+  .st.on{color:var(--ink);font-weight:800}
+  .stats{display:grid;grid-template-columns:1fr 1fr;gap:7px;margin-top:10px}
+  .stats .card .s{margin:0}
+  .stats .big{font-size:17px;font-weight:800;margin-top:4px}
+  .stats .big.p{color:var(--grape)}
+  .msg{font-size:11px;color:#D18412;background:var(--butter);border-radius:10px;padding:8px 10px;margin-top:8px;display:flex;gap:6px;align-items:center}
+  .tryme{position:absolute;right:10px;top:10px;font-size:9.5px;font-weight:700;color:var(--grape);background:#fff;border-radius:999px;padding:4px 8px;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+
+  /* record */
+  .seg{display:flex;gap:16px;padding:4px 16px 0;border-bottom:1px solid var(--line)}
+  .seg span{font-size:12px;color:var(--gray);padding-bottom:8px}
+  .seg span.on{color:var(--ink);font-weight:700;box-shadow:inset 0 -2.5px 0 var(--ink)}
+  .rec{margin-top:8px}
+  .rec .d{font-size:10px;color:var(--gray);display:flex;justify-content:space-between;align-items:center}
+  .rec .vq{font-family:"Nanum Myeongjo",serif;font-size:12px;color:var(--deep);font-weight:700;margin-top:6px;line-height:1.5;
+    border-left:3px solid var(--green);padding-left:8px}
+  .rec .pr{font-size:11.5px;margin-top:6px;line-height:1.5}
+  .month{display:grid;grid-template-columns:repeat(7,1fr);gap:4px;margin-top:8px}
+  .month span{aspect-ratio:1;border-radius:5px;background:#F2F4F6}
+  .month span.g{background:var(--grape-l)}
+  .month span.t{background:var(--grape);box-shadow:0 0 0 2px var(--gold)}
+
+  /* settings */
+  .set{background:#fff;border-radius:14px;margin-top:8px;padding:2px 12px;box-shadow:0 2px 10px rgba(80,60,20,.05)}
+  .set .ln{display:flex;justify-content:space-between;align-items:center;padding:11px 0;font-size:12px;font-weight:600}
+  .set .ln+.ln{border-top:1px solid var(--line)}
+  .set .ln em{font-style:normal;font-size:10.5px;color:var(--gray);font-weight:500}
+  .toggle{width:32px;height:18px;border-radius:9px;background:var(--blue);position:relative}
+  .toggle::after{content:"";position:absolute;right:2px;top:2px;width:14px;height:14px;border-radius:50%;background:#fff}
+  .backup{background:var(--butter);border-radius:14px;padding:12px;margin-top:8px;display:flex;gap:10px;align-items:center}
+  .backup p{font-size:11px;line-height:1.5;color:#A86A0E}
+  .backup b{display:block;font-size:12px;color:var(--ink)}
+
+  @media (max-width:640px){
+    .page{padding:36px 16px 60px}
+    .top h1{font-size:30px}
+    .row{justify-content:center}
+  }
+  /* daily growth */
+  .daybadge{position:absolute;left:10px;top:10px;font-size:10px;background:#fff;border-radius:999px;padding:4px 9px;box-shadow:0 2px 6px rgba(0,0,0,.08)}
+  .daybadge b{color:var(--grape)}
+  .daybadge.big{font-size:13px;padding:6px 12px;left:16px;top:16px}
+  .growname{margin-top:8px}
+  .growname b{display:block;font-size:14px;font-weight:800;letter-spacing:-.3px}
+  .growname span{display:block;font-size:11px;color:var(--green);font-weight:600;margin-top:2px;min-height:15px}
+  .slidebar{display:flex;align-items:center;gap:8px;margin-top:8px}
+  .slidebar input{flex:1;accent-color:#3182F6;height:20px}
+  .pbtn{flex:none;width:28px;height:28px;border-radius:50%;border:0;background:var(--grape);color:#fff;font-size:10px;cursor:pointer;font-family:inherit}
+  .stepBtn{background:#fff;color:var(--ink);font-size:16px;box-shadow:0 1px 5px rgba(0,0,0,.1)}
+  .stagebox{height:190px}
+  .stats{margin-top:8px}
+  .stats .card{padding:9px 12px}
+  .stats .big{font-size:15px}
+  .growpanel{margin-top:28px;display:grid;grid-template-columns:1.5fr 1fr;gap:20px;background:#fff;border-radius:24px;padding:20px;box-shadow:0 16px 40px rgba(110,80,20,.10)}
+  .gp-stage{position:relative;height:400px;border-radius:18px;overflow:hidden;background:linear-gradient(180deg,#FFF9EA,#FFE9B8)}
+  .gp-stage svg{position:absolute;inset:0;width:100%;height:100%}
+  .gp-info{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;margin-top:14px;flex-wrap:wrap}
+  .gp-name{font-size:22px;font-weight:800;letter-spacing:-.5px}
+  .gp-today{font-size:14px;color:var(--green);font-weight:600;margin-top:2px}
+  .gp-nums{display:flex;gap:14px;font-size:12px;color:var(--gray)}
+  .gp-nums b{display:block;font-size:17px;color:var(--ink)}
+  .gp-nums span:nth-child(2) b{color:var(--grape)}
+  .slidebar.wide{margin-top:14px}
+  .slidebar.wide .pbtn{width:34px;height:34px;font-size:12px}
+  .slidebar.wide .stepBtn{font-size:20px}
+  .gp-next{margin-top:12px;font-size:13px;background:var(--butter);color:#B5730F;border-radius:12px;padding:10px 14px}
+  .gp-next b{color:var(--ink);margin-right:6px}
+  .gp-title{font-size:16px;font-weight:800;margin-bottom:8px}
+  .gp-title span{font-size:12px;font-weight:500;color:var(--gray);margin-left:6px}
+  .ms{display:grid;grid-template-columns:52px 1fr;column-gap:10px;width:100%;text-align:left;border:0;background:none;font-family:inherit;padding:8px 10px;border-radius:12px;cursor:pointer;color:var(--ink);position:relative}
+  .ms .md{grid-row:span 2;font-size:12px;font-weight:800;color:#B0B8C1;align-self:center}
+  .ms .mn{font-size:13.5px;font-weight:700;color:#B0B8C1}
+  .ms .mt{font-size:11.5px;color:#B0B8C1}
+  .ms.done .md{color:var(--green)} .ms.done .mn{color:var(--ink)} .ms.done .mt{color:var(--gray)}
+  .ms.cur{background:var(--green-l)}
+  .ms.cur .md{color:var(--grape)}
+  .ms:hover{background:#F7F8FA}
+  .ms.cur:hover{background:var(--green-l)}
+  @media (max-width:860px){.growpanel{grid-template-columns:1fr}.gp-stage{height:300px}}
+  .concept{display:flex;gap:12px;align-items:center;margin-top:18px;background:#fff;border-radius:18px;padding:14px 18px;max-width:560px;box-shadow:0 4px 18px rgba(120,90,30,.08)}
+  .concept .cq{font-size:44px;line-height:1;color:var(--brand);font-weight:800;margin-top:6px}
+  .concept b{display:block;font-size:20px;font-weight:800;letter-spacing:-.5px}
+  .concept span{display:block;font-size:13px;color:var(--gray);margin-top:2px}
+  .setscroll{position:absolute;left:0;right:0;top:76px;bottom:62px;overflow-y:auto;scrollbar-width:none;padding-bottom:8px}
+  .setscroll::-webkit-scrollbar{display:none}
+  .aboutapp{text-align:center;margin-top:14px;padding-bottom:6px}
+  .aboutapp b{display:block;font-size:11.5px;color:var(--ink)}
+  .aboutapp span{display:block;font-size:9.5px;color:var(--gray);margin-top:2px}
+</style>
+</head>
+<body>
+
+<!-- reusable artwork -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <symbol id="mascot" viewBox="0 0 100 100">
+      <path d="M52 22 C49 14 54 8 62 6" stroke="#36B37E" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+      <path d="M58 14 C66 4 80 4 85 10 C77 18 66 19 58 14Z" fill="#36B37E"/>
+      <g fill="#B9A2F3"><circle cx="30" cy="36" r="13"/><circle cx="50" cy="32" r="13"/><circle cx="70" cy="36" r="13"/>
+        <circle cx="38" cy="58" r="13"/><circle cx="62" cy="58" r="13"/><circle cx="50" cy="80" r="13"/></g>
+      <circle cx="50" cy="54" r="23" fill="#7C5CDB"/>
+      <circle cx="43" cy="51" r="3" fill="#191F28"/><circle cx="57" cy="51" r="3" fill="#191F28"/>
+      <path d="M44 60 Q50 66 56 60" stroke="#191F28" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+      <circle cx="37" cy="59" r="3.5" fill="#F59AB5" opacity=".85"/><circle cx="63" cy="59" r="3.5" fill="#F59AB5" opacity=".85"/>
+      <circle cx="42" cy="44" r="7" fill="#fff" opacity=".18"/>
+    </symbol>
+    <symbol id="logo" viewBox="0 0 56 56">
+      <path d="M28 14 C30 6 38 4 44 6 C42 12 36 15 28 14Z" fill="#36B37E"/>
+      <g fill="#7C5CDB"><circle cx="18" cy="24" r="8"/><circle cx="30" cy="22" r="8"/><circle cx="42" cy="24" r="8"/>
+        <circle cx="24" cy="35" r="8"/><circle cx="36" cy="35" r="8"/><circle cx="30" cy="46" r="8"/></g>
+    </symbol>
+    <symbol id="spark" viewBox="0 0 20 20"><path d="M10 0l2.5 7.5L20 10l-7.5 2.5L10 20l-2.5-7.5L0 10l7.5-2.5z" fill="#FFB938"/></symbol>
+    <symbol id="check" viewBox="0 0 12 12"><path d="M2 6l3 3 5-6" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></symbol>
+  </defs>
+</svg>
+
+<div class="page">
+  <div class="top">
+    <svg><use href="#logo"/></svg>
+    <h1>성경-<span>말씀숲</span> 화면 흐름</h1>
+  </div>
+  <div class="concept"><span class="cq">“</span><div><b>열매 맺는 문화를 만들어 갑시다</b><span>나는 포도나무요 너희는 가지라 · 요한복음 15:5</span></div></div>
+  <p class="lead">처음 들어오는 순간부터 오늘의 미션, 포도원을 가꾸는 장면까지 15개 화면입니다.<br>꾸준함 하나에 집중하고, 미션은 딱 2가지.</p>
+  <div class="flow">
+    <span class="f">처음 들어오기</span><span class="a">→</span>
+    <span class="f">1장 읽기</span><span class="a">→</span>
+    <span class="f">한 줄 기도</span><span class="a">→</span>
+    <span class="f">광고 1회</span><span class="a">→</span>
+    <span class="f">포도알 맺힘</span><span class="a">→</span>
+    <span class="f">포도원이 자람</span>
+  </div>
+  <div class="note"><b>로그인 없이 바로 시작</b>하고, 폰을 바꿔도 포도원을 지키고 싶을 때만 카카오·Google로 연결합니다.<br><b>광고</b>는 미션을 마친 뒤 전면 광고 하루 1번, 놓친 날 되살리기(보상형), 기록 화면 배너, 그리고 광고 제거 구독으로 구성합니다.</div>
+
+  <!-- ===================== 1. 처음 들어올 때 ===================== -->
+  <section>
+    <div class="sh"><span class="no">STEP 1</span><h2>처음 들어올 때</h2><p>설치 후 1분 안에 첫 씨앗을 심어요</p></div>
+    <div class="row">
+
+      <!-- 01 splash -->
+      <div class="item">
+        <div class="phone"><div class="screen" style="background:linear-gradient(180deg,#FFFDF8,#FFE9B8)">
+          <div class="notch"></div><div class="status"></div>
+          <div class="center" style="position:absolute;left:0;right:0;top:170px">
+            <svg width="120" height="120"><use href="#mascot"/></svg>
+            <div style="font-size:24px;font-weight:800;letter-spacing:-.8px;margin-top:10px">성경-<span style="color:var(--green)">말씀숲</span></div>
+            <div style="font-size:13px;color:#7D6C45;margin-top:8px;font-weight:600">열매 맺는 문화를 만들어 갑시다</div><div style="font-size:11.5px;color:#A89668;margin-top:4px">하루 1장, 열매 맺는 말씀 습관</div>
+          </div>
+          <div class="center" style="position:absolute;left:0;right:0;bottom:40px;font-size:10.5px;color:#A89668">나는 포도나무요 너희는 가지라 · 요 15:5</div>
+        </div></div>
+        <div class="cap"><div class="n">01</div><h3>스플래시</h3><p>앱을 켜면 마스코트 '알알이'와 이름, 한 줄 소개가 1~2초 보여요.</p></div>
+      </div>
+
+      <!-- 02 onboarding 1 -->
+      <div class="item">
+        <div class="phone"><div class="screen">
+          <div class="notch"></div><div class="status"></div>
+          <div class="hd"><span></span><span class="pill">건너뛰기</span></div>
+          <div class="center" style="margin-top:22px">
+            <svg width="200" height="190" viewBox="0 0 200 190">
+              <circle cx="100" cy="95" r="82" fill="#FFF4DC"/>
+              <path d="M52 132 L100 140 L148 132 L148 108 L100 116 L52 108Z" fill="#fff" stroke="#C9BFA5" stroke-width="2"/>
+              <line x1="100" y1="116" x2="100" y2="140" stroke="#C9BFA5" stroke-width="2"/>
+              <path d="M100 116 C96 96 104 80 112 66" stroke="#36B37E" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+              <ellipse cx="88" cy="88" rx="13" ry="6" fill="#36B37E" transform="rotate(-25 88 88)"/>
+              <path d="M110 70 C120 56 136 56 142 62 C134 72 120 74 110 70Z" fill="#36B37E"/>
+              <g fill="#A58BF0"><circle cx="118" cy="88" r="6"/><circle cx="130" cy="88" r="6"/><circle cx="124" cy="98" r="6"/></g>
+              <use href="#spark" x="40" y="44" width="14" height="14"/><use href="#spark" x="150" y="40" width="10" height="10"/>
+            </svg>
+          </div>
+          <div class="center body" style="margin-top:14px">
+            <div style="font-size:11px;font-weight:700;color:var(--brand);margin-bottom:6px">열매 맺는 문화를 만들어 갑시다</div><h4>하루 1장,<br>말씀으로 열매 맺어요</h4>
+            <p class="sub">읽은 날만큼 포도나무가 자라고<br>남긴 기도는 포도알이 돼요</p>
+          </div>
+          <div class="bottom">
+            <div class="dots" style="margin-bottom:18px"><span class="on"></span><span></span></div>
+            <button class="btn">다음</button>
+          </div>
+        </div></div>
+        <div class="cap"><div class="n">02</div><h3>온보딩 1 · 컨셉</h3><p>컨셉 문장 "열매 맺는 문화를 만들어 갑시다"를 맨 위에 두고, 하루 1장으로 열매 맺는 방법을 한 장으로 설명해요. 언제든 건너뛸 수 있어요.</p></div>
+      </div>
+
+      <!-- 03 onboarding 2 -->
+      <div class="item">
+        <div class="phone"><div class="screen">
+          <div class="notch"></div><div class="status"></div>
+          <div class="hd"><span></span><span class="pill">건너뛰기</span></div>
+          <div class="body" style="margin-top:14px">
+            <h4>오늘의 미션은<br>딱 2가지예요</h4>
+            <p class="sub">5~10분이면 충분해요</p>
+            <div class="opt" style="margin-top:18px"><div style="display:flex;gap:10px;align-items:center"><span style="font-size:18px;font-weight:800;color:var(--grape)">1</span><div><div class="t2">1장 읽기</div><div class="s2">내가 고른 곳부터 차례대로</div></div></div></div>
+            <div class="opt"><div style="display:flex;gap:10px;align-items:center"><span style="font-size:18px;font-weight:800;color:var(--grape)">2</span><div><div class="t2">한 줄 기도</div><div class="s2">읽은 말씀을 떠올리며 짧게</div></div></div></div>
+            <div class="opt" style="box-shadow:none;background:transparent;border:1.5px dashed #E5E8EB"><div style="display:flex;gap:10px;align-items:center"><svg width="18" height="18" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z" fill="none" stroke="#36B37E" stroke-width="2" stroke-linejoin="round"/></svg><div><div class="t2" style="color:#4E5968">마음에 드는 구절은 저장</div><div class="s2">미션은 아니에요. 원할 때만!</div></div></div></div>
+            <div class="msg" style="margin-top:14px"><svg width="22" height="22"><use href="#mascot"/></svg>2가지를 마치면 포도알 하나가 맺혀요</div>
+          </div>
+          <div class="bottom">
+            <div class="dots" style="margin-bottom:18px"><span></span><span class="on"></span></div>
+            <button class="btn">좋아요</button>
+          </div>
+        </div></div>
+        <div class="cap"><div class="n">03</div><h3>온보딩 2 · 미션 소개</h3><p>할 일을 2가지로만 보여줘서 부담을 줄여요.</p></div>
+      </div>
+
+      <!-- 04 start -->
+      <div class="item">
+        <div class="phone"><div class="screen">
+          <div class="notch"></div><div class="status"></div>
+          <div class="center" style="margin-top:58px">
+            <svg width="96" height="96"><use href="#mascot"/></svg>
+            <h4 style="margin-top:10px">알알이와 함께<br>시작해 볼까요?</h4>
+            <p class="sub">가입 없이 바로 시작할 수 있어요</p>
+          </div>
+          <div class="bottom">
+            <div class="sns guest">로그인 없이 바로 시작하기</div>
+            <div style="display:flex;align-items:center;gap:8px;margin:16px 0 4px;font-size:10px;color:#B0B8C1"><span style="flex:1;height:1px;background:var(--line)"></span>기록을 지키고 싶다면<span style="flex:1;height:1px;background:var(--line)"></span></div>
+            <div class="sns kakao"><svg width="16" height="16" viewBox="0 0 24 24"><path d="M12 4C7 4 3 7.2 3 11.1c0 2.5 1.6 4.6 4.1 5.9l-1 3.7 4.2-2.8c.6.1 1.1.1 1.7.1 5 0 9-3.2 9-7.1S17 4 12 4z" fill="#191600"/></svg>카카오로 시작하기</div>
+            <div class="sns google"><svg width="16" height="16" viewBox="0 0 48 48"><path fill="#FFC107" d="M43.6 20.5H42V20H24v8h11.3C33.7 32.7 29.3 36 24 36c-6.6 0-12-5.4-12-12s5.4-12 12-12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 12.9 4 4 12.9 4 24s8.9 20 20 20 20-8.9 20-20c0-1.3-.1-2.4-.4-3.5z"/><path fill="#FF3D00" d="M6.3 14.7l6.6 4.8C14.7 15.1 19 12 24 12c3.1 0 5.8 1.2 7.9 3.1l5.7-5.7C34 6.1 29.3 4 24 4 16.3 4 9.7 8.3 6.3 14.7z"/><path fill="#4CAF50" d="M24 44c5.2 0 9.9-2 13.4-5.2l-6.2-5.2C29.2 35.1 26.7 36 24 36c-5.2 0-9.6-3.3-11.3-8l-6.5 5C9.5 39.6 16.2 44 24 44z"/><path fill="#1976D2" d="M43.6 20.5H42V20H24v8h11.3c-.8 2.2-2.2 4.2-4.1 5.6l6.2 5.2C37 39.2 44 34 44 24c0-1.3-.1-2.4-.4-3.5z"/></svg>Google로 시작하기</div>
+            <p class="center" style="font-size:9.5px;color:#B0B8C1;margin-top:10px">로그인하면 폰을 바꿔도 포도원이 그대로예요</p>
+          </div>
+        </div></div>
+        <div class="cap"><div class="n">04</div><h3>시작하기</h3><p>가입 없이 바로 시작이 기본이에요. 소셜 로그인은 선택이며 다음 업데이트에서 열어요.</p></div>
+      </div>
+
+      <!-- 05 first setup -->
+      <div class="item">
+        <div class="phone"><div class="screen">
+          <div class="notch"></div><div class="status"></div>
+          <div class="body" style="margin-top:8px">
+            <div class="setstep">1 / 2</div>
+            <h4 style="font-size:17px">어디서부터 읽을까요?</h4>
+            <div class="testa" id="testa"><button class="on" data-t="0">구약 39권</button><button data-t="1">신약 27권</button></div>
+            <div class="books" id="books"></div>
+            <div class="lbl" style="margin-top:10px;display:flex;justify-content:space-between"><span id="bookName">창세기</span><span style="font-weight:500;color:var(--gray)" id="bookCnt">전체 50장</span></div>
+            <div class="chaps" id="chaps"></div>
+          </div>
+          <div class="bottom">
+            <div class="pick" id="pickSum"><span>시작할 곳</span><b>창세기 1장</b></div>
+            <button class="btn">다음</button>
+          </div>
+        </div></div>
+        <div class="cap"><div class="n">05</div><h3>시작할 장 고르기 <span style="font-size:12px;color:var(--grape)">· 눌러 보기</span></h3><p>구약·신약 66권 중 책을 고르고, 원하는 장을 눌러요. 그 장부터 하루 1장씩 이어져요.</p></div>
+      </div>
+
+      <!-- 06 alarm time -->
+      <div class="item">
+        <div class="phone"><div class="screen">
+          <div class="notch"></div><div class="status"></div>
+          <div class="body" style="margin-top:8px">
+            <div class="setstep">2 / 2</div>
+            <h4 style="font-size:17px">매일 몇 시에<br>알려 드릴까요?</h4>
+            <div class="wheel">
+              <div class="hl"></div>
+              <div class="col" id="wAp"></div>
+              <div class="col" id="wH"></div>
+              <div class="colon">:</div>
+              <div class="col" id="wM"></div>
+            </div>
+            <div class="lbl">자주 고르는 시간</div>
+            <div class="chips" id="quick"><span data-v="0,7,0">아침 7:00</span><span data-v="1,12,30">점심 12:30</span><span data-v="1,9,0">밤 9:00</span></div>
+            <div class="alarmprev"><svg width="22" height="22"><use href="#mascot"/></svg><div><b id="alarmTxt">매일 오전 7:00</b><span>"오늘의 1장이 기다리고 있어요"</span></div></div>
+          </div>
+          <div class="bottom">
+            <button class="btn">이대로 시작할게요</button>
+            <button class="btn ghost">알림 없이 시작하기</button>
+          </div>
+        </div></div>
+        <div class="cap"><div class="n">06</div><h3>알림 시간 <span style="font-size:12px;color:var(--grape)">· 눌러 보기</span></h3><p>오전/오후·시·분을 위아래로 넘겨 고르거나, 자주 쓰는 시간을 한 번에 눌러요. 알림 없이 시작할 수도 있어요.</p></div>
+      </div>
+
+      <!-- 06 first seed -->
+      <div class="item">
+        <div class="phone"><div class="screen" style="background:linear-gradient(180deg,#FFFDF8,#FFF4DC)">
+          <div class="notch"></div><div class="status"></div>
+          <div class="center" style="margin-top:56px">
+            <svg width="220" height="180" viewBox="0 0 220 180">
+              <use href="#spark" x="40" y="30" width="16" height="16"/><use href="#spark" x="168" y="22" width="12" height="12"/><use href="#spark" x="176" y="90" width="10" height="10"/>
+              <ellipse cx="110" cy="150" rx="88" ry="16" fill="#E9D3A6"/>
+              <path d="M66 148 Q110 108 154 148Z" fill="#D9B97E"/>
+              <ellipse cx="110" cy="124" rx="11" ry="8" fill="#8A6A45"/>
+              <path d="M110 116 C108 104 114 96 120 92" stroke="#36B37E" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+              <g transform="translate(26 70)"><svg width="54" height="54"><use href="#mascot"/></svg></g>
+              <path d="M70 100 l12 6" stroke="#8ED0E8" stroke-width="3" stroke-linecap="round" stroke-dasharray="2 5"/>
+            </svg>
+            <h4 style="margin-top:6px">첫 씨앗을 심었어요!</h4>
+            <p class="sub">오늘의 미션을 마치면<br>싹이 트고 포도나무로 자라요</p>
+          </div>
+          <div class="bottom"><button class="btn">오늘의 미션 하러 가기</button></div>
+        </div></div>
+        <div class="cap"><div class="n">07</div><h3>첫 씨앗</h3><p>설정을 마치면 바로 씨앗을 심어 줘요. "내 포도원이 생겼다"는 첫 감정을 만들어요.</p></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== 2. 오늘의 미션 ===================== -->
+  <section>
+    <div class="sh"><span class="no">STEP 2</span><h2>오늘의 미션</h2><p>1장 읽기 → 한 줄 기도 → 광고 1회 → 포도알 맺힘</p></div>
+    <div class="row">
+
+      <!-- 08 home -->
+      <div class="item">
+        <div class="phone"><div class="screen">
+          <div class="notch"></div><div class="status"></div>
+          <div class="hd"><div class="brand"><svg width="16" height="16"><use href="#logo"/></svg>말씀숲</div><span class="pill">설정</span></div>
+          <div class="body">
+            <div class="banner"><p>알알이와 함께<br><b>12일째</b> 열매 맺는 중이에요 ›</p><svg width="44" height="44"><use href="#mascot"/></svg></div>
+            <div class="grid">
+              <div class="card tall"><div><div class="t">오늘의 미션</div><div class="s">창세기 13장</div></div><div><div class="v">2단계 중 0 완료</div><div class="bar"><i style="width:4%"></i></div></div></div>
+              <div class="card mini"><div class="t">나의<br>포도원</div><div class="nn">11알</div></div>
+              <div class="card mini"><div class="t">저장한<br>구절</div><div class="nn">5개</div></div>
+            </div>
+            <div class="gbox">
+              <div class="k">최근 저장한 말씀 ›</div>
+              <div class="q">빛이 있으라 하시매<br>빛이 있었고</div>
+              <div class="r">창세기 1:3</div>
+              <svg viewBox="0 0 100 100"><circle cx="56" cy="58" r="40" fill="#fff" opacity=".14"/><use href="#mascot" x="16" y="18" width="80" height="80"/></svg>
+            </div>
+            <div class="card list">
+              <div class="li"><span class="ck todo"></span>1장 읽기<span class="go">창세기 13장 ›</span></div>
+              <div class="li"><span class="ck todo"></span>한 줄 기도 남기기<span class="rt">읽은 뒤에</span></div>
+            </div>
+          </div>
+          <div class="tabs" data-on="0"></div>
+        </div></div>
+        <div class="cap"><div class="n">08</div><h3>홈</h3><p>오늘 할 일 2가지만 보여요. 초록 배너에는 최근에 저장한 구절이 걸려요.</p></div>
+      </div>
+
+      <!-- 09 reading -->
+      <div class="item">
+        <div class="phone"><div class="screen">
+          <div class="notch"></div><div class="status"></div>
+          <div class="hd"><span class="back">‹ 창세기</span><span class="pill">가 가</span></div>
+          <div class="step"><span class="on"></span><span></span></div>
+          <div class="steplabel">미션 1/2 · 1장 읽기 <span style="color:var(--gray);font-weight:500">· 구절을 누르면 저장</span></div>
+          <div class="langbox">
+            <div class="langlbl">본문 언어 · 복수 선택 가능</div>
+            <div class="langs" id="langs"><button class="lg on" data-l="ko">한국어</button><button class="lg" data-l="en">English</button></div>
+          </div>
+          <div class="scroll">
+            <div class="chap">1장</div>
+            <div class="verses" id="readVerses"></div>
+          </div>
+          <div class="fade"></div>
+          <div class="toast" id="saveToast">구절을 저장했어요</div>
+          <div class="bottom" style="bottom:18px">
+            <div style="display:flex;justify-content:space-between;font-size:10px;color:var(--gray);margin-bottom:5px"><span>끝까지 읽으면 버튼이 켜져요</span><span>5 / 31절</span></div>
+            <div class="bar" style="margin:0 0 10px"><i style="width:16%"></i></div>
+            <button class="btn">다 읽었어요</button>
+          </div>
+        </div></div>
+        <div class="cap"><div class="n">09</div><h3>1장 읽기 <span style="font-size:12px;color:var(--grape)">· 눌러 보기</span></h3><p>구절을 누르면 저장(책갈피)돼요. 한국어·English를 함께 켜면 한 절씩 나란히 보여요(개역한글 · KJV).</p></div>
+      </div>
+
+      <!-- 10 prayer -->
+      <div class="item">
+        <div class="phone"><div class="screen">
+          <div class="notch"></div><div class="status"></div>
+          <div class="hd"><span class="back">‹ 한 줄 기도</span><span></span></div>
+          <div class="step"><span class="on"></span><span class="on"></span></div>
+          <div class="steplabel">미션 2/2 · 읽은 말씀을 떠올리며 짧게</div>
+          <div class="body" style="margin-top:12px">
+            <div class="vcard"><div class="r" style="margin:0 0 4px">오늘 읽은 말씀</div><div class="q">창세기 1장</div></div>
+            <div class="lbl" style="margin-top:12px">오늘 저장한 구절 <span style="font-weight:500;color:var(--gray)">· 눌러서 붙이기</span></div>
+            <div class="savedchip"><svg width="12" height="12" viewBox="0 0 24 24"><path d="M6 3h12v18l-6-4-6 4z" fill="#36B37E"/></svg>1:3 빛이 있으라 하시매 빛이 있었고</div>
+            <div class="area">빛을 비추시는 하나님, 오늘 제 마음의 어두운 곳에도 빛이 있게 하소서.<span class="cur"></span></div>
+            <div class="count">38 / 100자</div>
+          </div>
+          <div class="bottom"><button class="btn">기도 남기고 미션 완료</button></div>
+        </div></div>
+        <div class="cap"><div class="n">10</div><h3>한 줄 기도</h3><p>100자 이내의 짧은 기도. 저장한 구절이 있으면 눌러서 기도에 함께 붙일 수 있어요.</p></div>
+      </div>
+
+      <!-- 11 interstitial ad -->
+      <div class="item">
+        <div class="phone"><div class="screen" style="background:#1C1F1D">
+          <div class="notch"></div><div class="status" style="filter:invert(1)"></div>
+          <div class="adtop"><span class="adtag">광고</span><button class="adclose" id="adClose">5초 후 닫기</button></div>
+          <div class="adarea">
+            <svg width="38" height="38" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2" fill="none" stroke="#6E746F" stroke-width="1.6"/><path d="M10 9.5v5l4.5-2.5z" fill="#6E746F"/></svg>
+            <b>전면 광고 영역</b>
+            <span>AdMob 전면 광고 · 5초 뒤 건너뛰기</span>
+          </div>
+          <div class="adfoot"><svg width="26" height="26"><use href="#mascot"/></svg><span>오늘 미션 완료! 광고가 끝나면<br>포도알이 맺혀요</span></div>
+        </div></div>
+        <div class="cap"><div class="n">11</div><h3>미션 완료 후 광고 <span style="font-size:12px;color:var(--grape)">· 하루 1번</span></h3><p>미션이 모두 끝난 쉼표에서만 1번 보여줘요. 읽기·기도 중간에는 광고가 없어요. 버튼을 누르면 다시 셀 수 있어요.</p></div>
+      </div>
+
+      <!-- 12 complete -->
+      <div class="item">
+        <div class="phone"><div class="screen">
+          <div class="notch"></div><div class="status"></div>
+          <div class="hd"><div class="brand"><svg width="16" height="16"><use href="#logo"/></svg>말씀숲</div><span class="pill">설정</span></div>
+          <div class="body"><div class="banner"><p>알알이와 함께<br><b>13일째</b> 열매 맺는 중이에요</p></div>
+            <div class="grid"><div class="card tall" style="height:110px"><div class="t">오늘의 미션</div></div><div class="card" style="height:51px"></div><div class="card" style="height:51px"></div></div></div>
+          <div class="dimbg"></div>
+          <div class="sheet">
+            <div class="grab"></div><span class="x">✕</span>
+            <h4 style="font-size:17px">오늘 미션 완료!<br>포도알 하나가 맺혔어요</h4>
+            <p class="sub" style="margin-top:4px">창세기 1장 · 기도 1줄 · 저장 1개</p>
+            <div class="center" style="margin:6px 0 4px">
+              <svg width="150" height="140" viewBox="0 0 150 140">
+                <circle cx="75" cy="72" r="62" fill="#FFF4DC"/>
+                <use href="#spark" x="18" y="30" width="16" height="16"/><use href="#spark" x="118" y="24" width="12" height="12"/><use href="#spark" x="124" y="98" width="10" height="10"/>
+                <use href="#mascot" x="25" y="20" width="100" height="100"/>
+              </svg>
+            </div>
+            <button class="btn">나의 포도원 보기</button>
+            <button class="btn ghost">홈으로</button>
+          </div>
+        </div></div>
+        <div class="cap"><div class="n">12</div><h3>미션 완료</h3><p>광고가 끝나면 바텀시트로 축하하고 포도알이 맺혀요. 연속 일수가 하루 올라가요.</p></div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ===================== 3. 포도원 가꾸기 ===================== -->
+  <section>
+    <div class="sh"><span class="no">STEP 3</span><h2>포도원 가꾸기</h2><p>읽은 날은 나무를 키우고, 기도는 포도알이 돼요</p></div>
+    <div class="row">
+
+      <!-- 13 vineyard (interactive, daily growth) -->
+      <div class="item">
+        <div class="phone"><div class="screen">
+          <div class="notch"></div><div class="status"></div>
+          <div class="hd"><span class="ttl">나의 포도원</span><span class="pill">공유</span></div>
+          <div class="body">
+            <div class="stagebox"><svg class="vinesvg" viewBox="0 0 240 200" preserveAspectRatio="xMidYMax meet"></svg><span class="daybadge"><b class="dDay">D+50</b></span></div>
+            <div class="growname"><b class="gName">익어 가는 송이</b><span class="gToday">포도가 조금 더 익었어요</span></div>
+            <div class="slidebar"><button class="pbtn playBtn" aria-label="재생">▶</button><input type="range" class="dayR" min="1" max="300" value="50" aria-label="읽은 날"></div>
+            <div class="stats">
+              <div class="card"><div class="s">읽은 날</div><div class="big sDays">50일</div></div>
+              <div class="card"><div class="s">맺은 포도알</div><div class="big p sFruit">50알</div></div>
+            </div>
+            <div class="msg"><svg width="20" height="20"><use href="#mascot"/></svg><span class="gNext"></span></div>
+          </div>
+          <div class="tabs" data-on="2"></div>
+        </div></div>
+        <div class="cap"><div class="n">13</div><h3>나의 포도원 <span style="font-size:12px;color:var(--grape)">· 넘겨 보기</span></h3><p>날짜를 넘기거나 ▶를 눌러 보세요. 미션을 마칠 때마다 잎·덩굴손·꽃·포도알 중 하나가 자라서 매일 그림이 달라져요.</p></div>
+      </div>
+
+      <!-- 13 record -->
+      <div class="item">
+        <div class="phone"><div class="screen">
+          <div class="notch"></div><div class="status"></div>
+          <div class="hd"><span class="ttl">기록</span><span class="pill">10월</span></div>
+          <div class="body">
+            <div class="card">
+              <div style="display:flex;justify-content:space-between;font-size:10.5px;font-weight:700"><span>이번 달 맺은 포도알</span><span style="color:var(--grape)">13알</span></div>
+              <div class="month" id="month"></div>
+            </div>
+            <div class="card rec">
+              <div class="d"><span>10월 17일 · 창세기 1장</span><svg width="12" height="12"><circle cx="6" cy="6" r="5" fill="#7C5CDB"/></svg></div>
+              <div class="vq">빛이 있으라 하시매 빛이 있었고 (1:3)</div>
+              <div class="pr">오늘 제 마음의 어두운 곳에도 빛이 있게 하소서.</div>
+            </div>
+            <div class="revive">
+              <div><b>10월 14일을 놓쳤어요</b><span>광고를 보면 연속 기록을 되살려요</span></div>
+              <button>▶ 되살리기</button>
+            </div>
+          </div>
+          <div class="adbanner"><span class="adtag sm">광고</span>배너 광고 영역 (320×50)</div>
+          <div class="tabs" data-on="3"></div>
+        </div></div>
+        <div class="cap"><div class="n">14</div><h3>기록 · 놓친 날 되살리기</h3><p>날짜 · 저장한 구절 · 내 기도가 카드로 쌓여요. 놓친 날은 보상형 광고로 되살리고, 하단엔 작은 배너가 있어요.</p></div>
+      </div>
+
+      <!-- 14 settings -->
+      <div class="item">
+        <div class="phone"><div class="screen">
+          <div class="notch"></div><div class="status"></div>
+          <div class="hd"><span class="back">‹ 설정</span><span></span></div>
+          <div class="body setscroll">
+            <div class="backup"><svg width="40" height="40"><use href="#mascot"/></svg><p><b>포도원 지키기</b>로그인하면 폰을 바꿔도<br>기록과 포도원이 그대로예요</p></div>
+            <div class="sns kakao" style="height:38px;font-size:12px"><svg width="14" height="14" viewBox="0 0 24 24"><path d="M12 4C7 4 3 7.2 3 11.1c0 2.5 1.6 4.6 4.1 5.9l-1 3.7 4.2-2.8c.6.1 1.1.1 1.7.1 5 0 9-3.2 9-7.1S17 4 12 4z" fill="#191600"/></svg>카카오로 연결하기</div>
+            <div class="set">
+              <div class="ln">매일 알림<span class="toggle"></span></div>
+              <div class="ln">알림 시간<em>아침 7시 ›</em></div>
+              <div class="ln">읽는 곳 바꾸기<em>창세기 13장 ›</em></div>
+            </div>
+            <div class="set">
+              <div class="ln">성경 언어<em>한국어 · English ›</em></div>
+              <div class="ln">글자 크기<em>보통 ›</em></div>
+              <div class="ln">어두운 화면<em>시스템 설정 ›</em></div>
+            </div>
+            <div class="set">
+              <div class="ln">광고 없이 쓰기<em>월 구독 ›</em></div>
+              <div class="ln">포도나무 한 그루 후원<em>›</em></div>
+            </div>
+            <div class="aboutapp"><b>열매 맺는 문화를 만들어 갑시다</b><span>요한복음 15:5 · 성경-말씀숲 v1.0</span>
+            </div>
+          </div>
+          <div class="tabs" data-on="0"></div>
+        </div></div>
+        <div class="cap"><div class="n">15</div><h3>설정 · 포도원 지키기</h3><p>로그인은 여기서 원할 때만. 화면을 내리면 맨 아래 앱 정보에 컨셉 문장과 말씀 구절이 있어요.</p></div>
+      </div>
+
+    </div>
+  </section>
+  <!-- ===================== 4. 매일 자라는 포도원 ===================== -->
+  <section>
+    <div class="sh"><span class="no">GROWTH</span><h2>매일 자라는 포도원</h2><p>초반 2주는 촘촘하게, 100일마다 새 나무 한 그루</p></div>
+    <div class="growpanel">
+      <div class="gp-left">
+        <div class="gp-stage"><svg class="vinesvg" viewBox="0 0 240 200" preserveAspectRatio="xMidYMax meet"></svg><span class="daybadge big"><b class="dDay">D+50</b></span></div>
+        <div class="gp-info">
+          <div><div class="gName gp-name">익어 가는 송이</div><div class="gToday gp-today">포도가 조금 더 익었어요</div></div>
+          <div class="gp-nums"><span>읽은 날 <b class="sDays">50일</b></span><span>포도알 <b class="sFruit">50알</b></span><span>포도나무 <b class="sTrees">0그루</b></span></div>
+        </div>
+        <div class="slidebar wide">
+          <button class="pbtn stepBtn" data-s="-1" aria-label="하루 전">‹</button>
+          <button class="pbtn playBtn" aria-label="재생">▶</button>
+          <button class="pbtn stepBtn" data-s="1" aria-label="하루 뒤">›</button>
+          <input type="range" class="dayR" min="1" max="300" value="50" aria-label="읽은 날">
+        </div>
+        <div class="gNext gp-next"></div>
+      </div>
+      <div class="gp-right">
+        <div class="gp-title">성장표 <span>누르면 그날로 이동</span></div>
+        <div id="msList"></div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+  /* status bars */
+  document.querySelectorAll('.status').forEach(function(el){
+    el.innerHTML='<span>9:41</span><i><svg width="15" height="9"><rect x="0" y="5" width="2.6" height="4" rx="1" fill="#222"/><rect x="4" y="3.5" width="2.6" height="5.5" rx="1" fill="#222"/><rect x="8" y="2" width="2.6" height="7" rx="1" fill="#222"/><rect x="12" y="0" width="2.6" height="9" rx="1" fill="#222"/></svg><svg width="20" height="10"><rect x=".5" y=".5" width="17" height="9" rx="2.5" fill="none" stroke="#222"/><rect x="2" y="2" width="13" height="6" rx="1.5" fill="#222"/><rect x="18.5" y="3" width="1.5" height="4" rx=".7" fill="#222"/></svg></i>';
+  });
+
+  /* tab bars */
+  var TABS=[
+    ['홈','<path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>'],
+    ['성경','<path d="M4 5c3-1 6-1 8 1 2-2 5-2 8-1v14c-3-1-6-1-8 1-2-2-5-2-8-1z"/>'],
+    ['포도원','<circle cx="8" cy="10" r="3"/><circle cx="16" cy="10" r="3"/><circle cx="12" cy="16" r="3"/>'],
+    ['기록','<path d="M6 3h9l4 4v14H6z"/><path d="M9 11h7M9 15h5"/>']
+  ];
+  document.querySelectorAll('.tabs').forEach(function(el){
+    var on=+el.dataset.on;
+    el.innerHTML=TABS.map(function(t,i){
+      var c=i===on?'#F5A623':'#B0B8C1';
+      var fill=(i===on&&i===0)?'fill="#F5A623"':'fill="none"';
+      return '<div class="tab'+(i===on?' on':'')+'"><svg viewBox="0 0 24 24" '+fill+' stroke="'+c+'" stroke-width="1.8" stroke-linejoin="round">'+t[1]+'</svg>'+t[0]+'</div>';
+    }).join('');
+  });
+
+  /* month calendar on record screen */
+  (function(){
+    var m=document.getElementById('month'),h='';
+    var done=[1,2,3,4,5,7,8,9,10,12,13,15,16,17];
+    for(var d=1;d<=28;d++){h+='<span class="'+(d===17?'t':(done.indexOf(d)>-1?'g':''))+'"></span>';}
+    m.innerHTML=h;
+  })();
+
+  /* reading screen: language toggle (KO 개역한글 / EN KJV) */
+  var GEN1=[
+    ['태초에 하나님이 천지를 창조하시니라','In the beginning God created the heaven and the earth.'],
+    ['땅이 혼돈하고 공허하며 흑암이 깊음 위에 있고 하나님의 신은 수면에 운행하시니라','And the earth was without form, and void; and darkness was upon the face of the deep. And the Spirit of God moved upon the face of the waters.'],
+    ['하나님이 가라사대 빛이 있으라 하시매 빛이 있었고','And God said, Let there be light: and there was light.'],
+    ['그 빛이 하나님의 보시기에 좋았더라 하나님이 빛과 어두움을 나누사','And God saw the light, that it was good: and God divided the light from the darkness.'],
+    ['빛을 낮이라 칭하시고 어두움을 밤이라 칭하시니라 저녁이 되며 아침이 되니 이는 첫째 날이니라','And God called the light Day, and the darkness he called Night. And the evening and the morning were the first day.']
+  ];
+  var langOn={ko:true,en:false};
+  function renderVerses(){
+    var both=langOn.ko&&langOn.en;
+    document.getElementById('readVerses').innerHTML=GEN1.map(function(v,i){
+      var t='';
+      if(langOn.ko)t+='<span class="ko">'+v[0]+'</span>';
+      if(langOn.en)t+=langOn.ko?'<span class="en">'+v[1]+'</span>':'<span>'+v[1]+'</span>';
+      return '<div class="vs'+(both?' pair':'')+(saved[i]?' saved':'')+'" data-i="'+i+'"><b>'+(i+1)+'</b><span>'+t+'</span></div>';
+    }).join('');
+    document.querySelectorAll('#langs .lg').forEach(function(b){b.classList.toggle('on',langOn[b.dataset.l]);});
+  }
+  var saved={2:true},toastT;
+  document.getElementById('readVerses').addEventListener('click',function(e){
+    var v=e.target.closest('.vs');if(!v)return;
+    var i=+v.dataset.i;saved[i]=!saved[i];renderVerses();
+    var t=document.getElementById('saveToast');
+    t.textContent=saved[i]?'창세기 1:'+(i+1)+' 저장했어요':'저장을 취소했어요';
+    t.classList.add('show');clearTimeout(toastT);toastT=setTimeout(function(){t.classList.remove('show');},1400);
+  });
+  document.getElementById('langs').addEventListener('click',function(e){
+    var b=e.target.closest('.lg');if(!b)return;
+    var l=b.dataset.l,other=l==='ko'?'en':'ko';
+    if(langOn[l]&&!langOn[other])return; /* 최소 하나는 선택 */
+    langOn[l]=!langOn[l];renderVerses();
+  });
+  renderVerses();
+
+  /* first setup: book & chapter picker */
+  var BIBLE=[
+    [['창세기',50],['출애굽기',40],['레위기',27],['민수기',36],['신명기',34],['여호수아',24],['사사기',21],['룻기',4],['사무엘상',31],['사무엘하',24],
+     ['열왕기상',22],['열왕기하',25],['역대상',29],['역대하',36],['에스라',10],['느헤미야',13],['에스더',10],['욥기',42],['시편',150],['잠언',31],
+     ['전도서',12],['아가',8],['이사야',66],['예레미야',52],['예레미야애가',5],['에스겔',48],['다니엘',12],['호세아',14],['요엘',3],['아모스',9],
+     ['오바댜',1],['요나',4],['미가',7],['나훔',3],['하박국',3],['스바냐',3],['학개',2],['스가랴',14],['말라기',4]],
+    [['마태복음',28],['마가복음',16],['누가복음',24],['요한복음',21],['사도행전',28],['로마서',16],['고린도전서',16],['고린도후서',13],['갈라디아서',6],
+     ['에베소서',6],['빌립보서',4],['골로새서',4],['데살로니가전서',5],['데살로니가후서',3],['디모데전서',6],['디모데후서',4],['디도서',3],['빌레몬서',1],
+     ['히브리서',13],['야고보서',5],['베드로전서',5],['베드로후서',3],['요한일서',5],['요한이서',1],['요한삼서',1],['유다서',1],['요한계시록',22]]
+  ];
+  var pk={t:0,b:0,c:1};
+  function drawBooks(){
+    document.querySelectorAll('#testa button').forEach(function(x){x.classList.toggle('on',+x.dataset.t===pk.t);});
+    document.getElementById('books').innerHTML=BIBLE[pk.t].map(function(b,i){return '<button class="'+(i===pk.b?'on':'')+'" data-b="'+i+'">'+b[0]+'</button>';}).join('');
+    drawChaps();
+  }
+  function drawChaps(){
+    var bk=BIBLE[pk.t][pk.b],h='';
+    for(var c=1;c<=bk[1];c++)h+='<button class="'+(c===pk.c?'on':'')+'" data-c="'+c+'">'+c+'</button>';
+    document.getElementById('chaps').innerHTML=h;
+    document.getElementById('bookName').textContent=bk[0];
+    document.getElementById('bookCnt').textContent='전체 '+bk[1]+'장';
+    document.querySelector('#pickSum b').textContent=bk[0]+' '+pk.c+'장';
+  }
+  document.getElementById('testa').addEventListener('click',function(e){var x=e.target.closest('button');if(!x)return;pk={t:+x.dataset.t,b:0,c:1};drawBooks();document.getElementById('books').scrollTop=0;});
+  document.getElementById('books').addEventListener('click',function(e){var x=e.target.closest('button');if(!x)return;pk.b=+x.dataset.b;pk.c=1;drawBooks();document.getElementById('chaps').scrollTop=0;});
+  document.getElementById('chaps').addEventListener('click',function(e){var x=e.target.closest('button');if(!x)return;pk.c=+x.dataset.c;drawChaps();});
+  drawBooks();
+
+  /* alarm time wheel */
+  var W={ap:['오전','오후'],h:[1,2,3,4,5,6,7,8,9,10,11,12],m:[]};
+  for(var mm=0;mm<60;mm+=5)W.m.push(mm<10?'0'+mm:''+mm);
+  var sel={ap:0,h:6,m:0};
+  function buildCol(id,arr,key){
+    var el=document.getElementById(id);
+    el.innerHTML='<div class="pad"></div>'+arr.map(function(v,i){return '<div data-i="'+i+'">'+v+'</div>';}).join('')+'<div class="pad"></div>';
+    var t;
+    el.addEventListener('scroll',function(){clearTimeout(t);t=setTimeout(function(){var i=Math.round(el.scrollTop/40);i=Math.max(0,Math.min(arr.length-1,i));sel[key]=i;paint();},80);});
+    el.addEventListener('click',function(e){var d=e.target.closest('[data-i]');if(d)el.scrollTo({top:+d.dataset.i*40,behavior:'smooth'});});
+  }
+  function paint(){
+    [['wAp','ap'],['wH','h'],['wM','m']].forEach(function(p){
+      document.querySelectorAll('#'+p[0]+' [data-i]').forEach(function(d){d.classList.toggle('on',+d.dataset.i===sel[p[1]]);});
+    });
+    document.getElementById('alarmTxt').textContent='매일 '+W.ap[sel.ap]+' '+W.h[sel.h]+':'+W.m[sel.m];
+  }
+  function setTime(ap,h,m){
+    sel={ap:ap,h:h-1,m:Math.round(m/5)};
+    document.getElementById('wAp').scrollTo({top:sel.ap*40,behavior:'smooth'});
+    document.getElementById('wH').scrollTo({top:sel.h*40,behavior:'smooth'});
+    document.getElementById('wM').scrollTo({top:sel.m*40,behavior:'smooth'});
+    paint();
+  }
+  buildCol('wAp',W.ap,'ap');buildCol('wH',W.h,'h');buildCol('wM',W.m,'m');
+  document.getElementById('wH').scrollTop=6*40;
+  paint();
+  document.getElementById('quick').addEventListener('click',function(e){
+    var s=e.target.closest('span');if(!s)return;var v=s.dataset.v.split(',').map(Number);setTime(v[0],v[1],v[2]);
+  });
+
+  /* interstitial countdown */
+  var adBtn=document.getElementById('adClose'),adT;
+  function runAd(){
+    var n=5;clearInterval(adT);adBtn.textContent=n+'초 후 닫기';
+    adT=setInterval(function(){n--;if(n<=0){clearInterval(adT);adBtn.textContent='닫기 ✕';}else adBtn.textContent=n+'초 후 닫기';},1000);
+  }
+  adBtn.addEventListener('click',runAd);runAd();
+
+  /* ===== 매일 자라는 포도원 ===== */
+  var G='#36B37E',GL='#5CC793',BR='#8A6A45';
+  var MS=[
+    [1,'씨앗','흙 속에 씨앗을 심어요'],[2,'싹 틈','흙을 뚫고 작은 싹이 올라와요'],[3,'떡잎','떡잎 두 장이 펴져요'],
+    [5,'본잎','첫 포도잎이 나와요'],[7,'어린 줄기','줄기가 쭉 자라요 · 1주 축하'],[10,'덩굴손','덩굴손이 나와 지지대를 찾아요'],
+    [14,'지지대 타기','지지대를 감고 올라가요 · 2주 축하'],[21,'가지 뻗기','양옆으로 가지가 퍼져요'],[30,'꽃','작은 포도꽃이 피어요 · 한 달 축하'],
+    [40,'초록 송이','덜 익은 초록 송이가 맺혀요'],[50,'익어 가는 송이','송이가 보라색으로 물들기 시작해요'],[70,'굵어지는 송이','포도알이 굵어지고 진해져요'],[100,'포도나무','송이가 주렁주렁 · 100일 축하']
+  ];
+  function msAt(r){for(var i=0;i<MS.length;i++)if(MS[i][0]===r)return MS[i];return null;}
+  function stageOf(r){var s=MS[0];MS.forEach(function(m){if(m[0]<=r)s=m;});return s;}
+  function cyc(d){return d>100?((d-1)%100)+1:d;}
+  function treeNo(d){return Math.ceil(d/100);}
+  function todayMsg(d){
+    var r=cyc(d),m=msAt(r),pre=d>100?treeNo(d)+'번째 나무 · ':'';
+    if(m)return pre+m[2];
+    var t;
+    if(r<5)t='떡잎이 조금 더 커졌어요';
+    else if(r<10)t='잎이 한 장 더 났어요';
+    else if(r<14)t='덩굴손이 하나 더 뻗었어요';
+    else if(r<21)t='가지가 왼쪽으로 조금 더 뻗었어요';
+    else if(r<30)t='가지에 잎이 한 장 더 났어요';
+    else if(r<40)t='꽃이 하나 더 피었어요';
+    else if(r<50)t=(r-40)%5===0?'새 송이가 하나 생겼어요':'송이가 조금 더 커졌어요';
+    else t=(r-40)%5===0?'새 송이가 하나 생겼어요':'포도가 조금 더 익었어요';
+    return pre+'오늘: '+t;
+  }
+  function nextMsg(d){
+    var r=cyc(d);
+    if(r===100)return '내일 · 포도원에 '+(treeNo(d)+1)+'번째 나무를 심어요';
+    for(var i=0;i<MS.length;i++){if(MS[i][0]>r){var n=MS[i][0]-r;return (n===1?'내일':n+'일 뒤')+' · '+MS[i][2].replace(/ · .*$/,'');}}
+    return '';
+  }
+  function lerp(a,b,t){
+    var pa=[1,3,5].map(function(i){return parseInt(a.substr(i,2),16);}),pb=[1,3,5].map(function(i){return parseInt(b.substr(i,2),16);});
+    return 'rgb('+pa.map(function(v,i){return Math.round(v+(pb[i]-v)*t);}).join(',')+')';
+  }
+  /* leaf slots: 6 on the stem, then alternating left/right along the wire */
+  var LS=[];
+  [160,146,132,118,104,92].forEach(function(y,i){LS.push({x:120+(i%2?11:-11),y:y,r:i%2?30:-30,side:'s'});});
+  for(var k=0;k<12;k++){
+    var off=16+k*6;
+    LS.push({x:120-off,y:72+(k%2?-5:5),r:(k%2?-20:15),side:'l',o:off});
+    LS.push({x:120+off,y:72+(k%2?5:-5),r:(k%2?20:-15),side:'r',o:off});
+  }
+  var FP=[46,194,70,170,96,144,58,182,84,156];
+  function leafS(x,y,r,s,c){return '<ellipse cx="'+x+'" cy="'+y+'" rx="'+(10*s)+'" ry="'+(5.2*s)+'" fill="'+(c||G)+'" transform="rotate('+r+' '+x+' '+y+')"/>';}
+  function curl(x,y,dir){return '<path d="M'+x+' '+y+' q'+(4*dir)+' -6 '+(8*dir)+' -2 q3 3 -1 6 q-3 1 -3 -2" stroke="'+GL+'" stroke-width="1.3" fill="none"/>';}
+  function vineG(d){
+    var s='';
+    if(d>=10)s+='<g opacity="'+(d>=14?1:.45)+'"><g stroke="#B49A6E" stroke-width="2.5" stroke-linecap="round"><line x1="34" y1="70" x2="34" y2="186"/><line x1="206" y1="70" x2="206" y2="186"/></g><line x1="34" y1="78" x2="206" y2="78" stroke="#C9B48A" stroke-width="1.5"/><line x1="34" y1="112" x2="206" y2="112" stroke="#C9B48A" stroke-width="1.5"/></g>';
+    if(d<21)s+='<path d="M86 188 Q120 '+(d<3?160:170)+' 154 188Z" fill="#D9B97E"/>';
+    if(d===1)return s+'<ellipse cx="120" cy="174" rx="9" ry="6.5" fill="'+BR+'"/><path d="M114 172 q6 -4 12 0" stroke="#A9895F" stroke-width="1.2" fill="none"/>';
+    var top=d>=14?80:178-(d-1)*7.5,w=2+Math.min(5,d/18),mid=(184+top)/2;
+    s+='<path d="M120 186 C117 '+(mid+10)+' 123 '+(mid-10)+' 120 '+top+'" stroke="'+(d<21?GL:BR)+'" stroke-width="'+w+'" fill="none" stroke-linecap="round"/>';
+    var L=d<14?0:Math.min(86,(d-13)*12),R=d<21?0:Math.min(86,(d-20)*10);
+    if(L)s+='<path d="M120 82 C'+(120-L*.4)+' 72 '+(120-L*.7)+' 80 '+(120-L)+' 79" stroke="'+(d<30?GL:'#7C6A45')+'" stroke-width="'+(2.5+Math.min(2,d/50))+'" fill="none" stroke-linecap="round"/>';
+    if(R)s+='<path d="M120 82 C'+(120+R*.4)+' 72 '+(120+R*.7)+' 80 '+(120+R)+' 79" stroke="'+(d<30?GL:'#7C6A45')+'" stroke-width="'+(2.5+Math.min(2,d/50))+'" fill="none" stroke-linecap="round"/>';
+    /* cotyledons */
+    if(d>=3&&d<21){var cy=d<5?top+5:163,cs=d===3?.7:.95;s+=leafS(112,cy,-25,cs,'#9ADBB8')+leafS(128,cy,25,cs,'#9ADBB8');}
+    /* sprout tip */
+    if(d===2)s+=leafS(116,top+2,-40,.45,'#9ADBB8')+leafS(124,top+2,40,.45,'#9ADBB8');
+    /* true leaves */
+    var n=d<5?0:Math.min(d-4,30),c=0;
+    for(var i=0;i<LS.length&&c<n;i++){
+      var p=LS[i],ok=p.side==='s'?p.y>top+6:(p.side==='l'?p.o<=L:p.o<=R);
+      if(!ok)continue;c++;
+      s+=leafS(p.x,p.y,p.r,p.side==='s'?.9:1);
+    }
+    /* tendrils */
+    if(d>=10){
+      var tn=Math.min(d-9,8),TP=[[124,top+14,1],[116,top+26,-1],[120-Math.max(L,20)+4,74,-1],[120+Math.max(R,20)-4,74,1],[90,86,-1],[150,86,1],[70,84,-1],[172,84,1]];
+      for(var t=0;t<tn;t++){if((t===3&&!R)||(t===5&&!R)||(t===7&&!R))continue;s+=curl(TP[t][0],TP[t][1],TP[t][2]);}
+    }
+    /* flowers 30-39 */
+    if(d>=30&&d<40){
+      for(var f=0;f<Math.min(d-29,10);f++){var fx=FP[f];s+='<g fill="#F4EBC8" stroke="#D8C98E" stroke-width=".6"><circle cx="'+fx+'" cy="90" r="2.6"/><circle cx="'+(fx-3)+'" cy="95" r="2.4"/><circle cx="'+(fx+3)+'" cy="95" r="2.4"/><circle cx="'+fx+'" cy="100" r="2.2"/></g>';}
+    }
+    /* grape clusters 40+ */
+    if(d>=40){
+      var nc=Math.min(2+Math.floor((d-40)/5),10),rip=Math.max(0,Math.min(1,(d-50)/45));
+      var rr=3.1+Math.min(1.7,(d-40)/35),rows=d<47?[3,2,1]:[4,3,2,1];
+      var c1=rip<.5?lerp('#A8CF7E','#C77FA8',rip*2):lerp('#C77FA8','#7C5CDB',rip*2-1),c2=rip<.5?lerp('#8FBF66','#D59AC0',rip*2):lerp('#D59AC0','#A58BF0',rip*2-1);
+      for(var g=0;g<nc;g++){
+        var gx=FP[g],gy=88;
+        s+='<path d="M'+gx+' 80 v'+(gy-82)+'" stroke="#7C6A45" stroke-width="1.2"/>';
+        rows.forEach(function(cnt,ri){for(var q=0;q<cnt;q++){var x=gx+(q-(cnt-1)/2)*rr*2,y=gy+ri*rr*1.7;s+='<circle cx="'+x+'" cy="'+y+'" r="'+rr+'" fill="'+((q+ri)%2?c2:c1)+'"/>';}});
+      }
+    }
+    return s;
+  }
+  function spark(x,y,sc){return '<path transform="translate('+x+' '+y+') scale('+sc+')" d="M10 0l2.5 7.5L20 10l-7.5 2.5L10 20l-2.5-7.5L0 10l7.5-2.5z" fill="#FFB938"/>';}
+  function scene(d){
+    var s='<circle cx="206" cy="30" r="13" fill="#FFB938" opacity=".9"/><ellipse cx="120" cy="192" rx="122" ry="14" fill="#E9D3A6"/>';
+    var v=[];
+    if(d<=100)v=[d];else{var k=Math.floor(d/100),r=d-k*100;for(var i=0;i<k;i++)v.push(100);if(r>0)v.push(r);}
+    if(v.length===1)s+=vineG(v[0]);
+    else{
+      var sc=v.length===2?.6:(v.length===3?.46:.38),wv=240*sc,gap=(240-wv*v.length)/(v.length+1);
+      v.forEach(function(vd,i){s+='<g transform="translate('+(gap+i*(wv+gap))+' '+(200-200*sc-4)+') scale('+sc+')">'+vineG(vd)+'</g>';});
+    }
+    var r2=cyc(d);
+    if(msAt(r2))s+=spark(22,26,.7)+spark(60,14,.45)+spark(178,58,.5);
+    return s;
+  }
+  var DAY=50,playT=null;
+  function setDay(d){
+    DAY=Math.max(1,Math.min(300,d));
+    var r=cyc(DAY),st=stageOf(r),svg=scene(DAY);
+    document.querySelectorAll('.vinesvg').forEach(function(e){e.innerHTML=svg;});
+    document.querySelectorAll('.dayR').forEach(function(e){e.value=DAY;});
+    document.querySelectorAll('.dDay').forEach(function(e){e.textContent=DAY+'일째';});
+    document.querySelectorAll('.gName').forEach(function(e){e.textContent=(DAY>100?'포도원 · ':'')+st[1];});
+    document.querySelectorAll('.gToday').forEach(function(e){e.textContent=todayMsg(DAY);});
+    document.querySelectorAll('.gNext').forEach(function(e){var t=nextMsg(DAY);if(e.tagName==='SPAN')e.textContent=t;else e.innerHTML='<b>다음 변화</b> '+t;});
+    document.querySelectorAll('.sDays').forEach(function(e){e.textContent=DAY+'일';});
+    document.querySelectorAll('.sFruit').forEach(function(e){e.textContent=DAY+'알';});
+    document.querySelectorAll('.sTrees').forEach(function(e){e.textContent=Math.floor(DAY/100)+'그루';});
+    document.querySelectorAll('#msList .ms').forEach(function(e){var md=+e.dataset.d;e.classList.toggle('done',md<=r||DAY>100&&md===101);e.classList.toggle('cur',stageOf(r)[0]===md&&DAY<=100||DAY>100&&md===101);});
+  }
+  document.querySelectorAll('.dayR').forEach(function(e){e.addEventListener('input',function(){stop();setDay(+e.value);});});
+  document.querySelectorAll('.stepBtn').forEach(function(b){b.addEventListener('click',function(){stop();setDay(DAY+ +b.dataset.s);});});
+  function stop(){clearInterval(playT);playT=null;document.querySelectorAll('.playBtn').forEach(function(b){b.textContent='▶';});}
+  document.querySelectorAll('.playBtn').forEach(function(b){b.addEventListener('click',function(){
+    if(playT){stop();return;}
+    if(DAY>=300)setDay(1);
+    document.querySelectorAll('.playBtn').forEach(function(x){x.textContent='❚❚';});
+    playT=setInterval(function(){if(DAY>=300){stop();return;}setDay(DAY+1);},DAY<100?260:120);
+  });});
+  (function(){
+    var list=MS.concat([[101,'포도원','100일마다 새 포도나무를 한 그루 심어요']]);
+    document.getElementById('msList').innerHTML=list.map(function(m){
+      return '<button class="ms" data-d="'+m[0]+'"><span class="md">'+(m[0]===101?'100일+':m[0]+'일')+'</span><span class="mn">'+m[1]+'</span><span class="mt">'+m[2]+'</span></button>';
+    }).join('');
+    document.getElementById('msList').addEventListener('click',function(e){var b=e.target.closest('.ms');if(b){stop();setDay(+b.dataset.d);}});
+  })();
+  setDay(50);
+</script>
+</body>
+</html>

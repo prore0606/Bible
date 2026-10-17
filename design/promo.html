@@ -1,0 +1,238 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>성경-말씀숲</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css">
+<style>
+  :root{
+    --green:#2E7D4F; --green-l:#DDF0E3; --deep:#1B4D3E; --grape:#6B3FA0; --grape-l:#8E63C4;
+    --cream1:#FFF8EC; --cream2:#FFE9B8; --butter:#FFF1CC; --gold:#F2B33D;
+    --ink:#1F2A24; --gray:#7A857F; --line:#ECEAE3;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
+  body{font-family:Pretendard,-apple-system,"Apple SD Gothic Neo",sans-serif;color:var(--ink);
+    background:linear-gradient(180deg,#FFFDF8 0%,var(--cream1) 30%,var(--cream2) 100%);overflow-x:hidden}
+  .wrap{width:100%;min-height:100vh;display:flex;align-items:center;justify-content:center;overflow:hidden}
+  .stage{width:1300px;height:980px;position:relative;flex:none;transform-origin:center center}
+
+  /* left copy */
+  .copy{position:absolute;left:92px;top:96px}
+  .logo{width:56px;height:56px;margin-bottom:26px}
+  .tag{font-size:42px;font-weight:400;letter-spacing:-1px;color:#3A3A34;line-height:1.25}
+  .name{font-size:46px;font-weight:800;letter-spacing:-1.5px;color:#2B2A24;margin-top:6px}
+  .name span{color:var(--green)}
+  .sub{margin-top:22px;font-size:18px;color:#6E6A5E;line-height:1.6}
+  .mission{display:flex;gap:10px;margin-top:22px}
+  .chip{background:#fff;border-radius:999px;padding:9px 16px;font-size:15px;font-weight:600;color:var(--deep);
+    box-shadow:0 4px 14px rgba(120,90,30,.08)}
+  .chip b{color:var(--grape);margin-right:4px}
+
+  /* phones */
+  .phone{position:absolute;width:350px;height:720px;border-radius:56px;padding:12px;
+    background:linear-gradient(145deg,#F4F4F2,#C9CBCC 40%,#EDEDEB 60%,#B9BBBC);
+    box-shadow:0 40px 80px rgba(110,80,20,.22),0 8px 20px rgba(110,80,20,.12), inset 0 0 0 2px #9EA1A3}
+  .phone::before{content:"";position:absolute;inset:6px;border-radius:50px;background:#111}
+  .screen{position:relative;width:100%;height:100%;border-radius:44px;overflow:hidden;background:#FFFCF6}
+  .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:150px;height:30px;background:#111;
+    border-radius:0 0 18px 18px;z-index:5}
+  .front{left:760px;top:140px;transform:perspective(1800px) rotateY(-14deg) rotateX(6deg) rotate(9deg)}
+  .back{left:470px;top:290px;transform:perspective(1800px) rotateY(-14deg) rotateX(6deg) rotate(9deg)}
+
+  /* screen content */
+  .status{display:flex;justify-content:space-between;align-items:center;padding:14px 26px 0 30px;font-size:13px;font-weight:700;height:40px}
+  .status .ic{display:flex;gap:5px;align-items:center}
+  .head{display:flex;justify-content:space-between;align-items:center;padding:14px 20px 10px}
+  .brand{display:flex;align-items:center;gap:6px;font-weight:800;font-size:17px;letter-spacing:-.5px}
+  .pill{font-size:11px;color:var(--gray);background:#F3F1EC;border-radius:999px;padding:5px 10px}
+  .banner{margin:4px 16px 10px;background:var(--butter);border-radius:16px;padding:14px 16px;display:flex;
+    justify-content:space-between;align-items:center;min-height:74px}
+  .banner p{font-size:12.5px;color:#B07A12;line-height:1.5;font-weight:600}
+  .banner p b{color:var(--grape)}
+  .grid{display:grid;grid-template-columns:1.1fr 1fr;gap:8px;margin:0 16px}
+  .card{background:#fff;border-radius:16px;padding:13px 14px;box-shadow:0 2px 10px rgba(80,60,20,.05)}
+  .card .t{font-size:13.5px;font-weight:700;line-height:1.35}
+  .card .s{font-size:11px;color:var(--gray);margin-top:4px}
+  .card .v{font-size:12px;font-weight:700;color:var(--green);margin-top:12px}
+  .tall{grid-row:span 2;display:flex;flex-direction:column;justify-content:space-between}
+  .bar{height:6px;background:#EEF2EE;border-radius:3px;margin-top:6px;overflow:hidden}
+  .bar i{display:block;height:100%;width:66%;background:var(--green);border-radius:3px}
+  .mini{display:flex;justify-content:space-between;align-items:center}
+  .mini .n{font-size:12px;font-weight:700;color:var(--grape)}
+  .green{margin:10px 16px;background:linear-gradient(135deg,#3C9A62,var(--green));border-radius:18px;padding:16px;color:#fff;
+    position:relative;overflow:hidden;min-height:124px}
+  .green .k{font-size:11px;opacity:.85}
+  .green .q{font-size:16px;font-weight:700;line-height:1.45;margin-top:8px;letter-spacing:-.3px}
+  .green .r{font-size:11px;opacity:.8;margin-top:6px}
+  .green svg{position:absolute;right:6px;bottom:-4px}
+  .list{margin:0 16px;background:#fff;border-radius:16px;padding:6px 14px;box-shadow:0 2px 10px rgba(80,60,20,.05)}
+  .row{display:flex;align-items:center;gap:10px;padding:9px 0;font-size:13px;font-weight:600}
+  .row+.row{border-top:1px solid var(--line)}
+  .dot{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none}
+  .done{background:var(--green)}
+  .todo{border:2px solid #D7DDD8}
+  .row .go{margin-left:auto;font-size:11.5px;color:var(--green);font-weight:700}
+  .row .ok{margin-left:auto;font-size:11px;color:var(--gray);font-weight:500}
+  .tabs{position:absolute;left:0;right:0;bottom:0;height:74px;background:#fff;border-top:1px solid var(--line);
+    display:flex;justify-content:space-around;padding-top:10px}
+  .tab{display:flex;flex-direction:column;align-items:center;gap:3px;font-size:10px;color:#A3ABA6}
+  .tab.on{color:var(--green);font-weight:700}
+
+  /* back phone: sheet */
+  .dim{position:absolute;inset:0;background:rgba(30,30,25,.38);z-index:3}
+  .sheet{position:absolute;left:0;right:0;bottom:0;height:430px;background:#fff;border-radius:26px 26px 0 0;z-index:4;padding:26px 22px 0}
+  .sheet .x{position:absolute;right:22px;top:24px;font-size:18px;color:#555}
+  .sheet h3{font-size:17px;font-weight:700;line-height:1.45;letter-spacing:-.4px}
+  .sheet .d{font-size:12px;color:var(--gray);margin-top:8px}
+  .sheet .art{display:flex;justify-content:center;margin:14px 0 8px;position:relative}
+  .sheet .btn{display:block;width:100%;border:0;background:var(--green);color:#fff;font-family:inherit;font-weight:700;
+    font-size:15px;height:50px;border-radius:12px;margin-top:6px}
+  .sheet .later{text-align:center;font-size:12px;color:var(--gray);margin-top:12px}
+  .back .screen>.content{filter:saturate(.9)}
+
+  @media (max-width:760px){ .sub br{display:none} }
+</style>
+</head>
+<body>
+<div class="wrap">
+<div class="stage" id="stage">
+
+  <div class="copy">
+    <svg class="logo" viewBox="0 0 56 56" aria-hidden="true">
+      <path d="M28 14 C30 6 38 4 44 6 C42 12 36 15 28 14Z" fill="#2E7D4F"/>
+      <g fill="#6B3FA0">
+        <circle cx="18" cy="24" r="8"/><circle cx="30" cy="22" r="8"/><circle cx="42" cy="24" r="8"/>
+        <circle cx="24" cy="35" r="8"/><circle cx="36" cy="35" r="8"/><circle cx="30" cy="46" r="8"/>
+      </g>
+    </svg>
+    <div class="tag">하루 1장, 열매 맺는 말씀 습관</div>
+    <div class="name">성경-<span>말씀숲</span></div>
+    <p class="sub">말씀을 읽을수록 포도나무가 자라고,<br>오늘의 기도가 포도알로 맺혀요.</p>
+    <div class="mission">
+      <div class="chip"><b>1</b>1장 읽기</div>
+      <div class="chip"><b>2</b>한 구절 고르기</div>
+      <div class="chip"><b>3</b>한 줄 기도</div>
+    </div>
+  </div>
+
+  <!-- BACK PHONE: mission complete bottom sheet -->
+  <div class="phone back">
+    <div class="screen">
+      <div class="notch"></div>
+      <div class="content">
+        <div class="status"><span>9:41</span><span class="ic">
+          <svg width="16" height="10"><rect x="0" y="6" width="3" height="4" rx="1" fill="#222"/><rect x="4.5" y="4" width="3" height="6" rx="1" fill="#222"/><rect x="9" y="2" width="3" height="8" rx="1" fill="#222"/><rect x="13" y="0" width="3" height="10" rx="1" fill="#222"/></svg>
+          <svg width="22" height="11"><rect x=".5" y=".5" width="19" height="10" rx="3" fill="none" stroke="#222"/><rect x="2" y="2" width="15" height="7" rx="2" fill="#222"/></svg></span></div>
+        <div class="head"><div class="brand"><svg width="18" height="18" viewBox="0 0 56 56"><g fill="#6B3FA0"><circle cx="18" cy="24" r="9"/><circle cx="38" cy="24" r="9"/><circle cx="28" cy="40" r="9"/></g></svg>말씀숲</div><div class="pill">알림</div></div>
+        <div class="banner"><p>알알이와 함께<br><b>12일째</b> 열매 맺는 중이에요</p></div>
+        <div class="grid">
+          <div class="card tall"><div><div class="t">오늘의 미션</div><div class="s">창세기 1장</div></div><div class="v">3단계 중 3 완료</div></div>
+          <div class="card mini"><div class="t">나의<br>포도원</div></div>
+          <div class="card mini"><div class="t">기록</div></div>
+        </div>
+      </div>
+      <div class="dim"></div>
+      <div class="sheet">
+        <span class="x">✕</span>
+        <h3>오늘 미션 완료!<br>포도알 하나가 맺혔어요</h3>
+        <div class="d">창세기 1장 · 고른 구절 1개 · 기도 1줄</div>
+        <div class="art">
+          <svg width="170" height="170" viewBox="0 0 170 170" aria-hidden="true">
+            <circle cx="85" cy="88" r="72" fill="#FFF1CC"/>
+            <g fill="#F2B33D"><path d="M30 46l3 7 7 3-7 3-3 7-3-7-7-3 7-3z"/><path d="M140 40l2 5 5 2-5 2-2 5-2-5-5-2 5-2z"/><path d="M146 118l2 4 4 2-4 2-2 4-2-4-4-2 4-2z"/></g>
+            <path d="M85 40 C82 30 88 22 98 20" stroke="#2E7D4F" stroke-width="4" fill="none" stroke-linecap="round"/>
+            <path d="M92 30 C102 18 120 18 126 26 C116 34 102 36 92 30Z" fill="#2E7D4F"/>
+            <g fill="#8E63C4"><circle cx="62" cy="62" r="16"/><circle cx="85" cy="58" r="16"/><circle cx="108" cy="62" r="16"/>
+              <circle cx="73" cy="86" r="16"/><circle cx="97" cy="86" r="16"/><circle cx="85" cy="110" r="16"/></g>
+            <g fill="#6B3FA0"><circle cx="85" cy="84" r="27"/></g>
+            <circle cx="76" cy="80" r="3.5" fill="#1F2A24"/><circle cx="94" cy="80" r="3.5" fill="#1F2A24"/>
+            <path d="M78 90 Q85 97 92 90" stroke="#1F2A24" stroke-width="3" fill="none" stroke-linecap="round"/>
+            <circle cx="69" cy="89" r="4" fill="#F59AB5" opacity=".8"/><circle cx="101" cy="89" r="4" fill="#F59AB5" opacity=".8"/>
+            <circle cx="77" cy="76" r="9" fill="#fff" opacity=".18"/>
+          </svg>
+        </div>
+        <button class="btn">나의 포도원 보기</button>
+        <div class="later">오늘 하루 보지 않기</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- FRONT PHONE: home -->
+  <div class="phone front">
+    <div class="screen">
+      <div class="notch"></div>
+      <div class="status"><span>9:41</span><span class="ic">
+        <svg width="16" height="10"><rect x="0" y="6" width="3" height="4" rx="1" fill="#222"/><rect x="4.5" y="4" width="3" height="6" rx="1" fill="#222"/><rect x="9" y="2" width="3" height="8" rx="1" fill="#222"/><rect x="13" y="0" width="3" height="10" rx="1" fill="#222"/></svg>
+        <svg width="22" height="11"><rect x=".5" y=".5" width="19" height="10" rx="3" fill="none" stroke="#222"/><rect x="2" y="2" width="15" height="7" rx="2" fill="#222"/></svg></span></div>
+      <div class="head"><div class="brand"><svg width="18" height="18" viewBox="0 0 56 56"><g fill="#6B3FA0"><circle cx="18" cy="24" r="9"/><circle cx="38" cy="24" r="9"/><circle cx="28" cy="40" r="9"/></g></svg>말씀숲</div><div class="pill">알림</div></div>
+
+      <div class="banner">
+        <p>알알이와 함께<br><b>12일째</b> 열매 맺는 중이에요 ›</p>
+        <svg width="56" height="56" viewBox="0 0 56 56" aria-hidden="true">
+          <path d="M28 12 C34 4 44 4 48 8 C42 14 34 14 28 12Z" fill="#2E7D4F"/>
+          <g fill="#8E63C4"><circle cx="18" cy="22" r="8"/><circle cx="38" cy="22" r="8"/><circle cx="28" cy="42" r="8"/></g>
+          <circle cx="28" cy="29" r="13" fill="#6B3FA0"/>
+          <circle cx="24" cy="27" r="1.8" fill="#1F2A24"/><circle cx="32" cy="27" r="1.8" fill="#1F2A24"/>
+          <path d="M24.5 32 Q28 35 31.5 32" stroke="#1F2A24" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+        </svg>
+      </div>
+
+      <div class="grid">
+        <div class="card tall">
+          <div><div class="t">오늘의 미션</div><div class="s">창세기 1장</div></div>
+          <div><div class="v">3단계 중 2 완료</div><div class="bar"><i></i></div></div>
+        </div>
+        <div class="card mini"><div class="t">나의<br>포도원</div><div class="n">12알</div></div>
+        <div class="card mini"><div class="t">기도<br>기록</div><div class="n">11개</div></div>
+      </div>
+
+      <div class="green">
+        <div class="k">내가 고른 오늘의 말씀 ›</div>
+        <div class="q">태초에 하나님이<br>천지를 창조하시니라</div>
+        <div class="r">창세기 1:1</div>
+        <svg width="96" height="96" viewBox="0 0 96 96" aria-hidden="true">
+          <circle cx="54" cy="58" r="38" fill="#fff" opacity=".14"/>
+          <path d="M50 20 C58 10 72 10 78 16 C70 24 58 24 50 20Z" fill="#B9E3C6"/>
+          <g fill="#A985D6"><circle cx="34" cy="38" r="12"/><circle cx="58" cy="36" r="12"/><circle cx="44" cy="70" r="12"/></g>
+          <circle cx="47" cy="52" r="20" fill="#7B4DB8"/>
+          <circle cx="41" cy="49" r="2.6" fill="#1F2A24"/><circle cx="53" cy="49" r="2.6" fill="#1F2A24"/>
+          <path d="M41 57 Q47 62 53 57" stroke="#1F2A24" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+          <rect x="64" y="56" width="22" height="28" rx="3" fill="#FFF8EC" transform="rotate(12 75 70)"/>
+          <line x1="68" y1="64" x2="82" y2="67" stroke="#2E7D4F" stroke-width="2" transform="rotate(12 75 70)"/>
+          <line x1="68" y1="70" x2="80" y2="73" stroke="#C9C3B5" stroke-width="2" transform="rotate(12 75 70)"/>
+        </svg>
+      </div>
+
+      <div class="list">
+        <div class="row"><span class="dot done"><svg width="12" height="12"><path d="M2 6l3 3 5-6" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>1장 읽기<span class="ok">창세기 1장</span></div>
+        <div class="row"><span class="dot done"><svg width="12" height="12"><path d="M2 6l3 3 5-6" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg></span>한 구절 고르기<span class="ok">1:1</span></div>
+        <div class="row"><span class="dot todo"></span>한 줄 기도 남기기<span class="go">하러 가기 ›</span></div>
+      </div>
+
+      <div class="tabs">
+        <div class="tab on"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z" fill="#2E7D4F"/></svg>홈</div>
+        <div class="tab"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M4 5c3-1 6-1 8 1 2-2 5-2 8-1v14c-3-1-6-1-8 1-2-2-5-2-8-1z" fill="none" stroke="#A3ABA6" stroke-width="1.8"/></svg>성경</div>
+        <div class="tab"><svg width="20" height="20" viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2" fill="none" stroke="#A3ABA6" stroke-width="1.8"/><path d="M8 3v4M16 3v4M4 10h16" stroke="#A3ABA6" stroke-width="1.8"/></svg>플랜</div>
+        <div class="tab"><svg width="20" height="20" viewBox="0 0 24 24"><g fill="none" stroke="#A3ABA6" stroke-width="1.8"><circle cx="8" cy="10" r="3"/><circle cx="16" cy="10" r="3"/><circle cx="12" cy="16" r="3"/></g></svg>포도원</div>
+        <div class="tab"><svg width="20" height="20" viewBox="0 0 24 24"><path d="M6 3h9l4 4v14H6z" fill="none" stroke="#A3ABA6" stroke-width="1.8"/><path d="M9 11h7M9 15h5" stroke="#A3ABA6" stroke-width="1.8"/></svg>기록</div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+<script>
+  function fit(){
+    var s=document.getElementById('stage');
+    var k=Math.min(window.innerWidth/1300, window.innerHeight/980, 1);
+    if(window.innerWidth<760){k=window.innerWidth/1300;}
+    s.style.transform='scale('+k+')';
+    s.parentElement.style.height=(980*k)+'px';
+    s.parentElement.style.minHeight=Math.max(980*k, window.innerHeight)+'px';
+  }
+  window.addEventListener('resize',fit); fit();
+</script>
+</body>
+</html>

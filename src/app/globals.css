@@ -1,0 +1,100 @@
+@import "tailwindcss";
+
+/* 디자인 토큰 (docs/spec.md 3장). 화면 코드에는 색상값을 직접 쓰지 않고 이 토큰만 쓴다. */
+:root {
+  --blue: #3182f6;
+  --blue-tint: #e8f3ff;
+  --green: #36b37e;
+  --green-2: #4cc38a;
+  --green-light: #e5f7ee;
+  --brand: #f5a623;
+  --butter: #fff4dc;
+  --butter-text: #e8971a;
+  --highlight: #fff3c4;
+  --gold: #ffb938;
+  --grape: #7c5cdb;
+  --grape-light: #a58bf0;
+  --bg: #f4f5f7;
+  --card: #ffffff;
+  --cream-1: #fff8ec;
+  --cream-2: #ffe9b8;
+  --ink: #191f28;
+  --gray: #8b95a1;
+  --line: #eef0f3;
+  color-scheme: light;
+}
+
+/* 다크 테마: spec에 있는 값(bg, card, blue, green, butter) 외에는 임시 값이다. 디자인 확정 후 교체. */
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --blue: #4c93ff;
+    --blue-tint: #1d2b44;
+    --green: #4cc38a;
+    --green-2: #4cc38a;
+    --green-light: #1c3a2c;
+    --butter: #2e2a20;
+    --highlight: #4a4220;
+    --bg: #17171c;
+    --card: #222228;
+    --ink: #f2f4f6;
+    --gray: #9aa3ae;
+    --line: #2e2e36;
+    color-scheme: dark;
+  }
+}
+
+:root[data-theme="dark"] {
+  --blue: #4c93ff;
+  --blue-tint: #1d2b44;
+  --green: #4cc38a;
+  --green-2: #4cc38a;
+  --green-light: #1c3a2c;
+  --butter: #2e2a20;
+  --highlight: #4a4220;
+  --bg: #17171c;
+  --card: #222228;
+  --ink: #f2f4f6;
+  --gray: #9aa3ae;
+  --line: #2e2e36;
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-blue: var(--blue);
+  --color-blue-tint: var(--blue-tint);
+  --color-green: var(--green);
+  --color-green-2: var(--green-2);
+  --color-green-light: var(--green-light);
+  --color-brand: var(--brand);
+  --color-butter: var(--butter);
+  --color-butter-text: var(--butter-text);
+  --color-highlight: var(--highlight);
+  --color-gold: var(--gold);
+  --color-grape: var(--grape);
+  --color-grape-light: var(--grape-light);
+  --color-bg: var(--bg);
+  --color-card: var(--card);
+  --color-cream-1: var(--cream-1);
+  --color-cream-2: var(--cream-2);
+  --color-ink: var(--ink);
+  --color-gray: var(--gray);
+  --color-line: var(--line);
+
+  /* 모서리: 카드 16, 버튼 14, 바텀시트 위 24 */
+  --radius-card: 16px;
+  --radius-button: 14px;
+  --radius-sheet: 24px;
+
+  --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.03), 0 4px 14px rgba(0, 0, 0, 0.04);
+
+  /* 글꼴은 앱에 포함시키기 전까지 시스템 글꼴로 대체된다 (T3 이후 번들) */
+  --font-sans: "Pretendard", -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-bible: "Nanum Myeongjo", "KoPub Batang", serif;
+}
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}

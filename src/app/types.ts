@@ -9,7 +9,7 @@ export type Settings = {
   onboarded: boolean;
   alarm: { enabled: boolean; hour: number; minute: number }; // 24시간제
   langs: { ko: boolean; en: boolean }; // 최소 하나 true
-  fontSize: "s" | "m" | "l";
+  fontSize: "s" | "m" | "l" | "xl";
   theme: "system" | "light" | "dark";
   next: Ref; // 다음 미션에서 읽을 장
   pendingNext?: Ref; // 설정에서 바꾼 읽는 곳 (다음 미션부터 적용)

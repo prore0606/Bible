@@ -2,7 +2,7 @@
 
 import { FONT_LABELS, type FontSize, type Langs } from "@/lib/reading";
 
-/** 글자 크기 버튼: 누를 때마다 작게 → 보통 → 크게 → 작게 */
+/** 글자 크기 버튼: 누를 때마다 작게 → 보통 → 크게 → 아주 크게 → 작게 */
 export function FontSizeButton({ fontSize, onCycle }: { fontSize: FontSize; onCycle: () => void }) {
   return (
     <button

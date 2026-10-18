@@ -11,14 +11,15 @@ import {
 import { pairVerses } from "@/lib/bible";
 
 describe("글자 크기", () => {
-  it("작게 15 / 보통 17 / 크게 20", () => {
-    expect(FONT_PX).toEqual({ s: 15, m: 17, l: 20 });
+  it("작게 15 / 보통 17 / 크게 20 / 아주 크게 24", () => {
+    expect(FONT_PX).toEqual({ s: 15, m: 17, l: 20, xl: 24 });
   });
 
-  it("버튼을 누를 때마다 작게 → 보통 → 크게 → 작게", () => {
+  it("버튼을 누를 때마다 작게 → 보통 → 크게 → 아주 크게 → 작게", () => {
     expect(nextFontSize("s")).toBe("m");
     expect(nextFontSize("m")).toBe("l");
-    expect(nextFontSize("l")).toBe("s");
+    expect(nextFontSize("l")).toBe("xl");
+    expect(nextFontSize("xl")).toBe("s");
   });
 });
 

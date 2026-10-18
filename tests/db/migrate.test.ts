@@ -59,10 +59,12 @@ describe("splitStatements", () => {
 
 describe("migrations.generated.ts", () => {
   it("db/sqlite 의 SQL 파일과 같다 (npm run gen:migrations 로 다시 만들 수 있다)", () => {
-    const file = readFileSync(join(process.cwd(), "db", "sqlite", "001_init.sql"), "utf8").replace(/\r\n/g, "\n");
-    expect(MIGRATIONS).toHaveLength(1);
+    const read = (name: string) => readFileSync(join(process.cwd(), "db", "sqlite", name), "utf8").replace(/\r\n/g, "\n");
+    expect(MIGRATIONS).toHaveLength(2);
     expect(MIGRATIONS[0]).toMatchObject({ version: 1, name: "001_init" });
-    expect(MIGRATIONS[0].sql).toBe(file);
+    expect(MIGRATIONS[0].sql).toBe(read("001_init.sql"));
+    expect(MIGRATIONS[1]).toMatchObject({ version: 2, name: "002_font_xl" });
+    expect(MIGRATIONS[1].sql).toBe(read("002_font_xl.sql"));
   });
 });
 
@@ -77,10 +79,27 @@ describe("migrate (진짜 SQLite 엔진)", () => {
     while (dbs.length) dbs.pop()!.close();
   });
 
-  it("빈 DB 에 001_init.sql 을 실행해 user_version 1 이 된다", async () => {
+  it("빈 DB 에 001, 002 를 차례로 실행해 user_version 2 가 된다", async () => {
     const db = fresh();
     expect(await getUserVersion(db)).toBe(0);
-    expect(await migrate(db)).toBe(1);
+    expect(await migrate(db)).toBe(2);
+  });
+
+  it("001 만 적용된 기존 기기를 올리면 설정을 그대로 두고 글자 크기 '아주 크게'를 받는다", async () => {
+    const db = fresh();
+    await migrate(db, MIGRATIONS.slice(0, 1));
+    await db.run("UPDATE app_settings SET onboarded = 1, font_size = 'l', next_book = 'PSA', next_chapter = 23, alarm_hour = 21 WHERE id = 1");
+    await expect(db.run("UPDATE app_settings SET font_size = 'xl' WHERE id = 1")).rejects.toThrow();
+    expect(await migrate(db)).toBe(2);
+    const [row] = await db.query("SELECT * FROM app_settings");
+    expect(row).toMatchObject({ onboarded: 1, font_size: "l", next_book: "PSA", next_chapter: 23, alarm_hour: 21 });
+    await db.run("UPDATE app_settings SET font_size = 'xl' WHERE id = 1");
+    await expect(db.run("UPDATE app_settings SET font_size = 'xxl' WHERE id = 1")).rejects.toThrow();
+    // updated_at 트리거도 다시 만들어졌다
+    await db.run("UPDATE app_settings SET updated_at = '2000-01-01T00:00:00.000Z' WHERE id = 1");
+    await db.run("UPDATE app_settings SET theme = 'dark' WHERE id = 1");
+    const [after] = await db.query<{ updated_at: string }>("SELECT updated_at FROM app_settings");
+    expect(after.updated_at).not.toBe("2000-01-01T00:00:00.000Z");
   });
 
   it("테이블·뷰·트리거가 모두 만들어진다", async () => {
@@ -123,7 +142,7 @@ describe("migrate (진짜 SQLite 엔진)", () => {
     const db = fresh();
     await migrate(db);
     await db.run("UPDATE app_settings SET onboarded = 1 WHERE id = 1");
-    expect(await migrate(db)).toBe(1);
+    expect(await migrate(db)).toBe(2);
     const [row] = await db.query<{ onboarded: number }>("SELECT onboarded FROM app_settings");
     expect(row.onboarded).toBe(1);
   });

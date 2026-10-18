@@ -6,13 +6,13 @@ import type { VersePair } from "@/lib/bible";
 export type Langs = Settings["langs"];
 export type FontSize = Settings["fontSize"];
 
-/** 글자 크기 설정: 작게 15 / 보통 17 / 크게 20 (px) */
-export const FONT_PX: Record<FontSize, number> = { s: 15, m: 17, l: 20 };
-export const FONT_LABELS: Record<FontSize, string> = { s: "작게", m: "보통", l: "크게" };
+/** 글자 크기 설정: 작게 15 / 보통 17 / 크게 20 / 아주 크게 24 (px) */
+export const FONT_PX: Record<FontSize, number> = { s: 15, m: 17, l: 20, xl: 24 };
+export const FONT_LABELS: Record<FontSize, string> = { s: "작게", m: "보통", l: "크게", xl: "아주 크게" };
 
-/** 글자 크기 버튼을 누를 때마다 작게 → 보통 → 크게 → 작게 */
+/** 글자 크기 버튼을 누를 때마다 작게 → 보통 → 크게 → 아주 크게 → 작게 */
 export function nextFontSize(size: FontSize): FontSize {
-  return size === "s" ? "m" : size === "m" ? "l" : "s";
+  return size === "s" ? "m" : size === "m" ? "l" : size === "l" ? "xl" : "s";
 }
 
 /** 언어 토글. 최소 하나는 켜져 있어야 하므로, 마지막 하나를 끄려는 요청은 무시한다. */

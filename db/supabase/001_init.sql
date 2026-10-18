@@ -55,7 +55,7 @@ create table if not exists public.user_settings (
   user_id          uuid primary key references auth.users (id) on delete cascade,
   lang_ko          boolean not null default true,
   lang_en          boolean not null default false,
-  font_size        text    not null default 'm' check (font_size in ('s', 'm', 'l')),
+  font_size        text    not null default 'm' check (font_size in ('s', 'm', 'l', 'xl')),
   theme            text    not null default 'system' check (theme in ('system', 'light', 'dark')),
   next_book        text    not null default 'GEN' check (char_length(next_book) = 3),
   next_chapter     smallint not null default 1 check (next_chapter >= 1),

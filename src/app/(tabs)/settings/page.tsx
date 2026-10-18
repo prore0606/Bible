@@ -293,7 +293,7 @@ function FontSheet({ fontSize, onSave, onClose }: { fontSize: FontSize; onSave: 
   return (
     <BottomSheet label="글자 크기" onClose={onClose}>
       <SheetTitle>글자 크기</SheetTitle>
-      {(["s", "m", "l"] as const).map((size) => (
+      {(["s", "m", "l", "xl"] as const).map((size) => (
         <Option key={size} role="radio" checked={fontSize === size} onClick={() => onSave({ fontSize: size })} title={`${FONT_LABELS[size]} · ${FONT_PX[size]}`}>
           <span className="mt-1 block font-bible leading-[1.6]" style={{ fontSize: FONT_PX[size] }}>
             {SAMPLE_VERSE}

@@ -34,6 +34,9 @@
 - 탭바 4개: 홈 · 성경 · 포도원 · 기록. 설정은 홈 오른쪽 위.
 - 글꼴은 앱에 번들한다(Pretendard 가변 + 나눔명조 400·700). 나눔명조 CSS는 `scripts/gen-fonts.mjs`가 만든 `src/styles/nanum-myeongjo.css`(woff2만) — 패키지 CSS를 직접 import하지 않는다(woff가 이중으로 들어감).
 - 공통 부품: `src/components/ui.tsx`(Button, Screen, BottomBar …), `BookPicker`, `TimeWheel`(설정에서 재사용). 일러스트(`components/art/`)의 SVG 색은 원본 그대로 두는 예외다.
+- 토스트는 `showToast("...")`(`src/app/toast.ts`), 본문 목록은 `VerseList`(읽기·자유 읽기 공용), 읽기·홈 규칙은 `src/lib/reading.ts`·`home.ts`(순수 함수 + 테스트).
+- React 린트(react-hooks)가 effect 안의 동기 `setState`와 `ref`라는 이름의 prop 접근을 막는다. 상태는 콜백/파생값으로, 위치 같은 prop은 `at` 등 다른 이름으로 쓴다.
+- 브라우저 확인(Playwright) 때는 선택자가 2개 이상에 걸리면 클릭이 재시도되어 엉뚱한 곳이 눌릴 수 있다. 고유한 선택자나 `evaluate`로 누른다.
 - 경로 보호는 `src/lib/routeGuard.ts`(첫 실행 전에는 01~07 화면만, 마친 뒤에는 온보딩·시작 설정 화면 차단). `AppProvider`가 저장소를 연 뒤에만 화면을 보여 준다.
 
 ## 핵심 규칙

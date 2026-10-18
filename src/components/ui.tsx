@@ -17,15 +17,19 @@ export function Screen({
   children,
   className = "",
   withBottomBar = false,
+  withTabBar = false,
 }: {
   children: ReactNode;
   className?: string;
+  /** 아래에 고정 버튼 영역(BottomBar)이 있을 때 */
   withBottomBar?: boolean;
+  /** 아래에 탭바(62px)가 있을 때 */
+  withTabBar?: boolean;
 }) {
   return (
     <main
       className={`flex flex-1 flex-col px-4 pt-[calc(16px+env(safe-area-inset-top))] ${
-        withBottomBar ? "pb-52" : "pb-[calc(24px+env(safe-area-inset-bottom))]"
+        withBottomBar ? "pb-52" : withTabBar ? "pb-[calc(88px+env(safe-area-inset-bottom))]" : "pb-[calc(24px+env(safe-area-inset-bottom))]"
       } ${className}`}
     >
       {children}

@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { appStore, useAppStore } from "@/app/store";
 import SplashView from "@/components/SplashView";
+import ToastHost from "@/components/Toast";
 import { Button, Screen } from "@/components/ui";
 import { guardTarget } from "@/lib/routeGuard";
 
@@ -47,5 +48,10 @@ export default function AppProvider({ children }: { children: React.ReactNode })
 
   // 준비 중이거나, 곧 다른 화면으로 옮겨 갈 때는 내용을 깜빡이지 않게 스플래시 모양을 유지한다
   if (status !== "ready" || target) return <SplashView />;
-  return <>{children}</>;
+  return (
+    <>
+      {children}
+      <ToastHost />
+    </>
+  );
 }

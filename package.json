@@ -12,7 +12,8 @@
     "gen:migrations": "node scripts/gen-migrations.mjs",
     "predev": "node scripts/gen-migrations.mjs && node scripts/copy-wasm.mjs",
     "prebuild": "node scripts/gen-migrations.mjs && node -e \"require('fs').rmSync('public/assets/sql-wasm.wasm',{force:true})\"",
-    "pretest": "node scripts/gen-migrations.mjs"
+    "pretest": "node scripts/gen-migrations.mjs",
+    "build:bible": "node scripts/build-bible.mjs"
   },
   "dependencies": {
     "@capacitor-community/sqlite": "^8.1.1",

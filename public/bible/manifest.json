@@ -1,0 +1,39 @@
+{
+  "schema": 1,
+  "books": 66,
+  "chapters": 1189,
+  "languages": {
+    "ko": {
+      "version": "개역한글판 (1961)",
+      "publisher": "대한성서공회",
+      "verses": 31101,
+      "collectedFrom": "holybible.or.kr"
+    },
+    "en": {
+      "version": "King James Version (1769)",
+      "verses": 31102,
+      "collectedFrom": "scrollmapper/bible_databases (CrossWire KJV2006 / eBible.org)"
+    }
+  },
+  "source": {
+    "repository": "https://github.com/crizin/bible-db",
+    "commit": "4bcb50b3ead59d20b4a6b847f5c79ab4cdba6a2c"
+  },
+  "koFixes": [
+    {
+      "ref": "NUM 18:11",
+      "before": "내게 돌릴 것이",
+      "after": "네게 돌릴 것이"
+    },
+    {
+      "ref": "DEU 9:12",
+      "before": "낸 내 백성이",
+      "after": "낸 네 백성이"
+    },
+    {
+      "ref": "ISA 48:13",
+      "before": "하늘에",
+      "after": "하늘을"
+    }
+  ]
+}

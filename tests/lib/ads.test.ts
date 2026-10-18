@@ -3,6 +3,7 @@ import {
   INTERSTITIAL_READY_TIMEOUT_MS,
   createMockAdProvider,
   runInterstitialGate,
+  runRewardedGate,
   shouldShowInterstitial,
   type AdProvider,
 } from "@/lib/ads";
@@ -18,6 +19,7 @@ function fakeProvider(over: Partial<AdProvider> = {}): AdProvider & { shown: num
     async showInterstitial() {
       p.shown += 1;
     },
+    showRewarded: () => Promise.resolve(true),
     ...over,
   };
   return p as AdProvider & { shown: number };
@@ -106,5 +108,39 @@ describe("createMockAdProvider (웹 개발 모드)", () => {
     expect(done).toBe(false);
     await vi.advanceTimersByTimeAsync(1);
     expect(done).toBe(true);
+  });
+});
+
+describe("runRewardedGate (놓친 날 되살리기)", () => {
+  it("끝까지 봐서 보상이 지급되면 rewarded", async () => {
+    await expect(runRewardedGate(fakeProvider({ showRewarded: () => Promise.resolve(true) }))).resolves.toEqual({ rewarded: true });
+  });
+
+  it("중간에 닫아 보상이 없으면 rewarded 가 아니다 (되살아나지 않음)", async () => {
+    await expect(runRewardedGate(fakeProvider({ showRewarded: () => Promise.resolve(false) }))).resolves.toEqual({ rewarded: false });
+  });
+
+  it("불러오지 못하거나 오류가 나도 예외 없이 rewarded: false", async () => {
+    await expect(runRewardedGate(fakeProvider({ showRewarded: () => Promise.reject(new Error("no fill")) }))).resolves.toEqual({ rewarded: false });
+  });
+
+  it("true 가 아닌 값은 보상으로 치지 않는다", async () => {
+    const odd = fakeProvider({ showRewarded: () => Promise.resolve(undefined as unknown as boolean) });
+    await expect(runRewardedGate(odd)).resolves.toEqual({ rewarded: false });
+  });
+
+  it("웹 모의 광고는 정해진 시간 뒤에 보상을 지급한다", async () => {
+    vi.useFakeTimers();
+    try {
+      const p = createMockAdProvider(1000);
+      let rewarded: boolean | undefined;
+      void runRewardedGate(p).then((r) => (rewarded = r.rewarded));
+      await vi.advanceTimersByTimeAsync(999);
+      expect(rewarded).toBeUndefined();
+      await vi.advanceTimersByTimeAsync(1);
+      expect(rewarded).toBe(true);
+    } finally {
+      vi.useRealTimers();
+    }
   });
 });

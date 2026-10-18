@@ -4,7 +4,8 @@ import { createStore, useStore } from "zustand";
 import type { DayLog, Ref, SavedVerse, Settings } from "@/app/types";
 import { previewOf } from "@/lib/bible";
 import { getStorage } from "@/lib/db/client";
-import { toDateKey } from "@/lib/date";
+import { addDays, toDateKey } from "@/lib/date";
+import { tomorrowRef } from "@/lib/home";
 import { completeMission, markRead, missionStatus, startMission, type MissionStatus } from "@/lib/mission";
 import { verseId } from "@/lib/reading";
 import type { SettingsPatch, Stats, Storage } from "@/lib/storage";
@@ -53,6 +54,15 @@ export type AppState = {
   leaveFlow(): void;
   /** 구절을 저장하거나, 이미 저장돼 있으면 취소한다. 저장된 상태가 되면 true. */
   toggleVerse(input: { ref: Ref; verse: number; text: string }): Promise<boolean>;
+  /** 저장한 구절을 지운다(저장 취소). 지운 구절을 돌려주어 "되돌리기"에 쓴다. 이미 없으면 undefined. */
+  removeVerse(id: string): Promise<SavedVerse | undefined>;
+  /** 지웠던 구절을 원래 저장 시각 그대로 다시 저장한다 ("되돌리기") */
+  restoreVerse(verse: SavedVerse): Promise<void>;
+  /**
+   * 어제를 되살린다 (보상형 광고를 끝까지 본 뒤에 부른다). 되살릴 수 없는 상태면 예외.
+   * 되살린 날은 연속 기록만 잇고 포도알·성장일은 늘지 않는다. 되살린 날짜를 돌려준다.
+   */
+  reviveYesterday(): Promise<string>;
 };
 
 export type StoreDeps = {
@@ -195,6 +205,41 @@ export function createAppStore({ getStorage, now = () => new Date() }: StoreDeps
           }
           await load();
           return !already;
+        }),
+
+      removeVerse: (id) =>
+        enqueue(async () => {
+          const s = await storage();
+          const target = (await s.listSavedVerses()).find((v) => v.id === id);
+          if (!target) return undefined;
+          await s.unsaveVerse(id, now().toISOString());
+          await load();
+          return target;
+        }),
+
+      restoreVerse: (verse) =>
+        enqueue(async () => {
+          await (await storage()).saveVerse(verse);
+          await load();
+        }),
+
+      reviveYesterday: () =>
+        enqueue(async () => {
+          const s = await storage();
+          const current = now();
+          const today = toDateKey(current);
+          const [settings, logs, revivedAts] = await Promise.all([
+            s.getSettings(),
+            s.listDayLogs(),
+            s.listRevivedAtSince(new Date(current.getTime() - REVIVE_COOLDOWN_DAYS * DAY_MS).toISOString()),
+          ]);
+          const filled = filledDates(logs.map((l) => ({ date: l.date, completed: !!l.completedAt, revived: l.revived })));
+          // 화면의 버튼 상태가 오래됐을 수 있으니 저장된 기록으로 다시 확인한다 (같은 주에 두 번 쓰는 것을 막는다)
+          if (!canRevive(filled, today, revivedAts, current)) throw new Error("지금은 되살릴 수 없어요");
+          const date = addDays(today, -1);
+          await s.reviveDay(date, tomorrowRef(settings), current.toISOString());
+          await load();
+          return date;
         }),
     };
   });

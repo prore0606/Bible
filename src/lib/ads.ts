@@ -23,6 +23,20 @@ export interface AdProvider {
   awaitInterstitialReady(): Promise<boolean>;
   /** 광고를 보여 주고, 닫힐 때까지 기다린다 */
   showInterstitial(): Promise<void>;
+  /** 보상형 광고(놓친 날 되살리기). 끝까지 봐서 보상이 지급되면 true, 중간에 닫았거나 불러오지 못하면 false */
+  showRewarded(): Promise<boolean>;
+}
+
+/**
+ * 보상형 광고 관문: 광고를 끝까지 봐야(보상 지급) rewarded = true.
+ * 불러오지 못하거나 오류가 나도 예외를 던지지 않고 false 를 돌려주어, 화면이 "지금은 광고를 불러올 수 없어요"로 안내한다.
+ */
+export async function runRewardedGate(provider: AdProvider): Promise<{ rewarded: boolean }> {
+  try {
+    return { rewarded: (await provider.showRewarded()) === true };
+  } catch {
+    return { rewarded: false };
+  }
 }
 
 export type GateResult = { shown: boolean };
@@ -66,6 +80,7 @@ export function createMockAdProvider(durationMs: number = MOCK_AD_DURATION_MS): 
     prepareInterstitial() {},
     awaitInterstitialReady: () => Promise.resolve(true),
     showInterstitial: () => new Promise<void>((resolve) => setTimeout(resolve, durationMs)),
+    showRewarded: () => new Promise<boolean>((resolve) => setTimeout(() => resolve(true), durationMs)),
   };
 }
 

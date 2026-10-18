@@ -387,3 +387,125 @@ describe("기도 이어서 쓰기 · 방금 완료한 미션 (T7)", () => {
     expect(store.getState().lastCompleted?.linkedVerseId).toBe("GEN.1.3");
   });
 });
+
+describe("저장한 구절 삭제·되돌리기 (기록 화면)", () => {
+  const GEN1 = { book: "GEN", chapter: 1 } as const;
+
+  it("removeVerse 는 저장을 취소하고 지운 구절을 돌려준다", async () => {
+    const store = newStore();
+    await store.getState().init();
+    await store.getState().toggleVerse({ ref: GEN1, verse: 3, text: "빛이 있으라" });
+    const removed = await store.getState().removeVerse("GEN.1.3");
+    expect(removed).toMatchObject({ id: "GEN.1.3", preview: "빛이 있으라" });
+    expect(store.getState().savedVerses).toEqual([]);
+    expect(store.getState().stats?.savedCount).toBe(0);
+  });
+
+  it("없는 구절을 지우면 undefined", async () => {
+    const store = newStore();
+    await store.getState().init();
+    expect(await store.getState().removeVerse("GEN.9.9")).toBeUndefined();
+  });
+
+  it("되돌리기: 원래 저장 시각 그대로 다시 저장된다 (순서도 그대로)", async () => {
+    const store = newStore();
+    await store.getState().init();
+    clock = at(2026, 10, 18, 9, 0);
+    await store.getState().toggleVerse({ ref: GEN1, verse: 1, text: "태초에" });
+    clock = at(2026, 10, 18, 9, 5);
+    await store.getState().toggleVerse({ ref: GEN1, verse: 3, text: "빛이 있으라" });
+    clock = at(2026, 10, 18, 9, 10);
+    await store.getState().toggleVerse({ ref: GEN1, verse: 5, text: "첫째 날" });
+    const before = store.getState().savedVerses.map((v) => v.id);
+
+    clock = at(2026, 10, 18, 10, 0);
+    const removed = await store.getState().removeVerse("GEN.1.3");
+    await store.getState().restoreVerse(removed!);
+    expect(store.getState().savedVerses.map((v) => v.id)).toEqual(before); // 맨 앞으로 튀지 않는다
+    expect(store.getState().savedVerses.find((v) => v.id === "GEN.1.3")?.savedAt).toBe(removed!.savedAt);
+  });
+});
+
+describe("어제 되살리기 (T9)", () => {
+  const completeDays = async (store: ReturnType<typeof newStore>, days: number[]) => {
+    for (const day of days) {
+      clock = at(2026, 10, day);
+      await store.getState().init();
+      await store.getState().refresh();
+      await store.getState().beginReading();
+      await store.getState().finishReading();
+      await store.getState().completePrayer("기도");
+    }
+  };
+
+  it("어제를 놓쳤으면 되살려서 연속 기록이 이어지고, 포도알·성장일은 그대로다", async () => {
+    const store = newStore();
+    await completeDays(store, [15, 16]);
+    clock = at(2026, 10, 18); // 17일을 놓침
+    await store.getState().refresh();
+    expect(selectHomeSummary(store.getState(), clock)).toMatchObject({ streak: 0, canRevive: true });
+
+    const date = await store.getState().reviveYesterday();
+    expect(date).toBe("2026-10-17");
+    const s = store.getState();
+    expect(selectHomeSummary(s, clock)).toMatchObject({ streak: 3, missedYesterday: false, canRevive: false });
+    expect(s.stats).toMatchObject({ completedDays: 2, grapes: 2, growthDay: 3 }); // 성장 없음
+    expect(s.logs.find((l) => l.date === "2026-10-17")).toMatchObject({ revived: true, completedAt: undefined });
+  });
+
+  it("되살린 날의 장은 내일 미션의 장(현재 진도)으로 기록되고 진도는 그대로다", async () => {
+    const store = newStore();
+    await completeDays(store, [15, 16]);
+    clock = at(2026, 10, 18);
+    await store.getState().refresh();
+    const nextBefore = store.getState().settings?.next;
+    await store.getState().reviveYesterday();
+    expect(store.getState().logs.find((l) => l.date === "2026-10-17")?.ref).toEqual(nextBefore);
+    expect(store.getState().settings?.next).toEqual(nextBefore);
+  });
+
+  it("되살릴 수 없는 상태에서는 예외 (이틀 놓침)", async () => {
+    const store = newStore();
+    await completeDays(store, [14]);
+    clock = at(2026, 10, 17); // 15, 16일을 놓친 뒤 17일 → 어제(16)와 그제(15)가 모두 비어 있음
+    await store.getState().refresh();
+    await expect(store.getState().reviveYesterday()).rejects.toThrow("지금은 되살릴 수 없어요");
+  });
+
+  it("어제를 놓치지 않았으면 예외", async () => {
+    const store = newStore();
+    await completeDays(store, [16, 17]);
+    clock = at(2026, 10, 18);
+    await store.getState().refresh();
+    await expect(store.getState().reviveYesterday()).rejects.toThrow();
+  });
+
+  it("두 번 연달아 눌러도 한 번만 되살린다 (같은 날 중복 방지)", async () => {
+    const store = newStore();
+    await completeDays(store, [15, 16]);
+    clock = at(2026, 10, 18);
+    await store.getState().refresh();
+    const results = await Promise.allSettled([store.getState().reviveYesterday(), store.getState().reviveYesterday()]);
+    expect(results.map((r) => r.status)).toEqual(["fulfilled", "rejected"]);
+    expect(store.getState().logs.filter((l) => l.revived)).toHaveLength(1);
+  });
+
+  it("일주일 안에 다시 놓쳐도 또 되살릴 수 없고, 7일이 지나면 다시 가능하다", async () => {
+    const store = newStore();
+    await completeDays(store, [1, 2]);
+    clock = at(2026, 10, 4); // 3일을 놓침 → 되살림
+    await store.getState().refresh();
+    await store.getState().reviveYesterday();
+
+    await completeDays(store, [4, 5]);
+    clock = at(2026, 10, 7); // 6일을 놓침, 되살린 지 3일
+    await store.getState().refresh();
+    expect(selectHomeSummary(store.getState(), clock).canRevive).toBe(false);
+    await expect(store.getState().reviveYesterday()).rejects.toThrow();
+
+    await completeDays(store, [7, 8, 9, 10, 11, 12, 13, 14, 15]);
+    clock = at(2026, 10, 17); // 16일을 놓침, 되살린 지 13일
+    await store.getState().refresh();
+    expect(selectHomeSummary(store.getState(), clock).canRevive).toBe(true);
+  });
+});

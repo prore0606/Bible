@@ -1,12 +1,16 @@
 // 앱 전역 상태 (zustand 1개 + 저장소 연동). 화면은 이 상태와 액션만 쓰고 SQL·규칙을 직접 건드리지 않는다.
 // 규칙은 src/lib/ 의 순수 함수, 저장은 src/lib/storage.ts 가 맡는다.
 import { createStore, useStore } from "zustand";
-import type { DayLog, Settings } from "@/app/types";
+import type { DayLog, Ref, SavedVerse, Settings } from "@/app/types";
+import { previewOf } from "@/lib/bible";
 import { getStorage } from "@/lib/db/client";
 import { toDateKey } from "@/lib/date";
 import { completeMission, markRead, missionStatus, startMission, type MissionStatus } from "@/lib/mission";
+import { verseId } from "@/lib/reading";
 import type { SettingsPatch, Stats, Storage } from "@/lib/storage";
-import { currentStreak, filledDates, missedYesterday } from "@/lib/streak";
+import { REVIVE_COOLDOWN_DAYS, canRevive, currentStreak, filledDates, missedYesterday } from "@/lib/streak";
+
+const DAY_MS = 86_400_000;
 
 export type AppState = {
   status: "idle" | "loading" | "ready" | "error";
@@ -18,6 +22,10 @@ export type AppState = {
   /** 날짜 오름차순 전체 기록 — 연속 기록·달력 계산용 */
   logs: DayLog[];
   stats?: Stats;
+  /** 저장한 구절 전체 (최근 저장한 순서) */
+  savedVerses: SavedVerse[];
+  /** 최근 7일 안에 되살린 시각들 — 되살리기 가능 여부 판단용 */
+  revivedAts: string[];
   /**
    * 지금 읽기→기도 흐름이 진행 중인 미션의 날짜 (메모리에만 둔다).
    * 23:50에 읽기를 시작해 00:10에 기도를 남겨도 전날 미션으로 완료되게 한다.
@@ -36,6 +44,8 @@ export type AppState = {
   completePrayer(prayer: string, linkedVerseId?: string): Promise<DayLog>;
   /** 읽기·기도 화면을 떠날 때 (홈으로 등) */
   leaveFlow(): void;
+  /** 구절을 저장하거나, 이미 저장돼 있으면 취소한다. 저장된 상태가 되면 true. */
+  toggleVerse(input: { ref: Ref; verse: number; text: string }): Promise<boolean>;
 };
 
 export type StoreDeps = {
@@ -58,7 +68,14 @@ export function createAppStore({ getStorage, now = () => new Date() }: StoreDeps
 
     async function load() {
       const s = await storage();
-      const [settings, logs, stats] = await Promise.all([s.getSettings(), s.listDayLogs(), s.getStats()]);
+      const since = new Date(now().getTime() - REVIVE_COOLDOWN_DAYS * DAY_MS).toISOString();
+      const [settings, logs, stats, savedVerses, revivedAts] = await Promise.all([
+        s.getSettings(),
+        s.listDayLogs(),
+        s.getStats(),
+        s.listSavedVerses(),
+        s.listRevivedAtSince(since),
+      ]);
       const today = toDateKey(now());
       const active = get().activeDate;
       const activeLog = active ? logs.find((l) => l.date === active) : undefined;
@@ -66,6 +83,8 @@ export function createAppStore({ getStorage, now = () => new Date() }: StoreDeps
         settings,
         logs,
         stats,
+        savedVerses,
+        revivedAts,
         today,
         todayLog: logs.find((l) => l.date === today),
         // 이미 완료됐거나 기록이 없으면 흐름은 끝난 것
@@ -77,6 +96,8 @@ export function createAppStore({ getStorage, now = () => new Date() }: StoreDeps
       status: "idle",
       today: toDateKey(now()),
       logs: [],
+      savedVerses: [],
+      revivedAts: [],
 
       async init() {
         if (get().status === "ready" || get().status === "loading") return;
@@ -142,6 +163,21 @@ export function createAppStore({ getStorage, now = () => new Date() }: StoreDeps
         }),
 
       leaveFlow: () => set({ activeDate: undefined }),
+
+      toggleVerse: ({ ref, verse, text }) =>
+        enqueue(async () => {
+          const s = await storage();
+          const id = verseId(ref, verse);
+          const already = (await s.listSavedVersesInChapter(ref)).some((v) => v.id === id);
+          const nowIso = now().toISOString();
+          if (already) {
+            await s.unsaveVerse(id, nowIso);
+          } else {
+            await s.saveVerse({ id, ref, verse, preview: previewOf(text), savedAt: nowIso });
+          }
+          await load();
+          return !already;
+        }),
     };
   });
 }
@@ -156,9 +192,14 @@ export type HomeSummary = {
   mission: MissionStatus;
   streak: number;
   missedYesterday: boolean;
+  /** 어제를 되살릴 수 있는가 (어제 놓침 + 그제 채움 + 최근 7일 미사용) */
+  canRevive: boolean;
 };
 
-export function selectHomeSummary(state: Pick<AppState, "logs" | "today" | "todayLog">): HomeSummary {
+export function selectHomeSummary(
+  state: Pick<AppState, "logs" | "today" | "todayLog" | "revivedAts">,
+  now: Date = new Date(),
+): HomeSummary {
   const filled = filledDates(
     state.logs.map((l) => ({ date: l.date, completed: !!l.completedAt, revived: l.revived })),
   );
@@ -166,5 +207,6 @@ export function selectHomeSummary(state: Pick<AppState, "logs" | "today" | "toda
     mission: missionStatus(state.todayLog),
     streak: currentStreak(filled, state.today),
     missedYesterday: missedYesterday(filled, state.today),
+    canRevive: canRevive(filled, state.today, state.revivedAts, now),
   };
 }

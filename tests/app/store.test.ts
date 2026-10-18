@@ -61,7 +61,7 @@ describe("하루 미션 흐름", () => {
     const done = await store.getState().completePrayer("감사합니다");
     expect(done.completedAt).toBe(clock.toISOString());
     const s = store.getState();
-    expect(selectHomeSummary(s)).toEqual({ mission: "done", streak: 1, missedYesterday: false });
+    expect(selectHomeSummary(s)).toEqual({ mission: "done", streak: 1, missedYesterday: false, canRevive: false });
     expect(s.settings?.next).toEqual({ book: "GEN", chapter: 2 });
     expect(s.stats).toMatchObject({ completedDays: 1, growthDay: 2 });
     expect(s.activeDate).toBeUndefined();
@@ -217,5 +217,90 @@ describe("selectHomeSummary", () => {
     clock = at(2026, 10, 18); // 17일을 안 했다
     await store.getState().refresh();
     expect(selectHomeSummary(store.getState())).toMatchObject({ streak: 0, missedYesterday: true });
+  });
+});
+
+describe("저장한 구절 (읽기 화면)", () => {
+  const GEN1 = { book: "GEN", chapter: 1 } as const;
+
+  it("구절을 누르면 저장되고, 다시 누르면 취소된다", async () => {
+    const store = newStore();
+    await store.getState().init();
+    const text = "하나님이 가라사대 빛이 있으라 하시매 빛이 있었고";
+
+    expect(await store.getState().toggleVerse({ ref: GEN1, verse: 3, text })).toBe(true);
+    expect(store.getState().savedVerses.map((v) => v.id)).toEqual(["GEN.1.3"]);
+    expect(store.getState().stats?.savedCount).toBe(1);
+
+    expect(await store.getState().toggleVerse({ ref: GEN1, verse: 3, text })).toBe(false);
+    expect(store.getState().savedVerses).toEqual([]);
+    expect(store.getState().stats?.savedCount).toBe(0);
+  });
+
+  it("미리보기는 본문 앞 40자까지 저장한다", async () => {
+    const store = newStore();
+    await store.getState().init();
+    const long = "가".repeat(70);
+    await store.getState().toggleVerse({ ref: GEN1, verse: 2, text: long });
+    expect(store.getState().savedVerses[0].preview).toBe("가".repeat(40));
+  });
+
+  it("최근 저장한 구절이 맨 앞에 온다 (홈의 초록 배너)", async () => {
+    const store = newStore();
+    await store.getState().init();
+    clock = at(2026, 10, 18, 9, 0);
+    await store.getState().toggleVerse({ ref: GEN1, verse: 1, text: "태초에" });
+    clock = at(2026, 10, 18, 9, 5);
+    await store.getState().toggleVerse({ ref: GEN1, verse: 3, text: "빛이 있으라" });
+    expect(store.getState().savedVerses.map((v) => v.id)).toEqual(["GEN.1.3", "GEN.1.1"]);
+  });
+
+  it("취소했던 구절을 다시 저장하면 다시 보인다", async () => {
+    const store = newStore();
+    await store.getState().init();
+    const input = { ref: GEN1, verse: 3, text: "빛이 있으라" };
+    await store.getState().toggleVerse(input);
+    await store.getState().toggleVerse(input);
+    expect(await store.getState().toggleVerse(input)).toBe(true);
+    expect(store.getState().savedVerses).toHaveLength(1);
+  });
+
+  it("빠르게 두 번 눌러도 순서대로 처리돼 저장 → 취소가 된다", async () => {
+    const store = newStore();
+    await store.getState().init();
+    const input = { ref: GEN1, verse: 5, text: "첫째 날" };
+    const results = await Promise.all([store.getState().toggleVerse(input), store.getState().toggleVerse(input)]);
+    expect(results).toEqual([true, false]);
+    expect(store.getState().savedVerses).toEqual([]);
+  });
+});
+
+describe("selectHomeSummary.canRevive", () => {
+  it("어제만 놓치고 그제까지 이어졌으면 되살릴 수 있다", async () => {
+    const store = newStore();
+    for (const day of [15, 16]) {
+      clock = at(2026, 10, day);
+      await store.getState().init();
+      await store.getState().refresh();
+      await store.getState().beginReading();
+      await store.getState().finishReading();
+      await store.getState().completePrayer("기도");
+    }
+    clock = at(2026, 10, 18); // 17일을 놓침
+    await store.getState().refresh();
+    const s = store.getState();
+    expect(selectHomeSummary(s, clock)).toMatchObject({ missedYesterday: true, canRevive: true });
+  });
+
+  it("이틀 놓쳤으면 되살릴 수 없다", async () => {
+    const store = newStore();
+    clock = at(2026, 10, 15);
+    await store.getState().init();
+    await store.getState().beginReading();
+    await store.getState().finishReading();
+    await store.getState().completePrayer("기도");
+    clock = at(2026, 10, 18); // 16, 17일을 놓침
+    await store.getState().refresh();
+    expect(selectHomeSummary(store.getState(), clock)).toMatchObject({ missedYesterday: true, canRevive: false });
   });
 });

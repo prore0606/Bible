@@ -101,11 +101,11 @@ export default function HomeView() {
           </div>
         </section>
         <MiniCard href="/vineyard/" title={["나의", "포도원"]} value={`${stats.grapes}알`} />
-        <MiniCard href="/records/" title={["저장한", "구절"]} value={`${stats.savedCount}개`} />
+        <MiniCard href="/records/?tab=saved" title={["저장한", "구절"]} value={`${stats.savedCount}개`} />
       </div>
 
       <Link
-        href={latest ? "/records/" : "/read/"}
+        href={latest ? "/records/?tab=saved" : "/read/"}
         className="relative block min-h-[132px] overflow-hidden rounded-card bg-gradient-to-br from-green-2 to-green p-4 text-white"
       >
         <div className="text-[12px] opacity-85">{latest ? "최근 저장한 말씀 ›" : "오늘의 말씀 ›"}</div>

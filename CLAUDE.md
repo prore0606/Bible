@@ -30,7 +30,8 @@
 - 색·글꼴·모서리는 spec.md 3장 토큰만 사용. 색상값을 화면 코드에 직접 쓰지 않는다.
 - 주요 토큰: blue #3182F6(버튼·선택), green #36B37E(큰 배너), brand #F5A623(활성 탭·포인트), butter #FFF4DC(안내 배너), grape #7C5CDB(포도알), bg #F4F5F7 + 흰 카드, ink #191F28, gray #8B95A1
 - UI 글꼴 Pretendard, 한국어 본문 나눔명조 17px / 줄간격 1.75
-- 마스코트(`#mascot`)와 포도원 그림(`vineG`, `scene`, `todayMsg`, `nextMsg`)은 screens.html에서 그대로 옮긴다. 새로 그리지 않는다.
+- 마스코트(`#mascot`)와 포도원 그림(`vineG`, `scene`, `todayMsg`, `nextMsg`)은 screens.html에서 그대로 옮긴다. 새로 그리지 않는다. 옮긴 코드는 `src/lib/vineSvg.ts`·`growth.ts`이고, `tests/lib/vineGolden.test.ts`가 screens.html의 원본 스크립트와 글자 단위로 비교한다 — 이 코드의 식이나 순서를 바꾸지 말고, 바꿔야 하면 원본(screens.html)과 같이 바꿔서 테스트를 통과시킨다.
+- 어제를 놓친 상태의 "처진 잎"은 원본에 없어서 `vineG(d, wilt)`의 변형으로 만들었다(잎 각도 ±50°·색만 바꿈). 오늘 미션을 마치면(`isWilted`) 바로 회복된다.
 - 탭바 4개: 홈 · 성경 · 포도원 · 기록. 설정은 홈 오른쪽 위.
 - 글꼴은 앱에 번들한다(Pretendard 가변 + 나눔명조 400·700). 나눔명조 CSS는 `scripts/gen-fonts.mjs`가 만든 `src/styles/nanum-myeongjo.css`(woff2만) — 패키지 CSS를 직접 import하지 않는다(woff가 이중으로 들어감).
 - 공통 부품: `src/components/ui.tsx`(Button, Screen, BottomBar …), `BookPicker`, `TimeWheel`(설정에서 재사용). 일러스트(`components/art/`)의 SVG 색은 원본 그대로 두는 예외다.

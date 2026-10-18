@@ -81,10 +81,10 @@ export default function SettingsPage() {
 
       <section className="mt-6 text-center" aria-label="앱 정보">
         <b className="block text-[14px]">{CONCEPT_SENTENCE}</b>
-        <span className="mt-0.5 block text-[12px] text-gray">
+        <span className="mt-0.5 block text-[12px] text-gray-text">
           요한복음 15:5 · 성경-말씀숲{APP_VERSION && ` v${APP_VERSION}`}
         </span>
-        <p className="mt-3 text-[11px] leading-[1.7] text-gray">
+        <p className="mt-3 text-[11px] leading-[1.7] text-gray-text">
           {BIBLE_CREDIT}
           <br />
           {VERSE_NUMBER_NOTE}
@@ -96,7 +96,7 @@ export default function SettingsPage() {
             href={PRIVACY_POLICY_URL}
             target="_blank"
             rel="noopener noreferrer"
-            className="mt-3 inline-block text-[12px] font-semibold text-blue underline"
+            className="mt-3 inline-block text-[12px] font-semibold text-blue-text underline"
           >
             개인정보처리방침
           </a>
@@ -120,7 +120,7 @@ function Row({ label, value, onClick, divider = false }: { label: string; value:
       className={`flex w-full items-center justify-between py-3.5 text-left text-[15px] font-semibold ${divider ? "border-t border-line" : ""}`}
     >
       <span>{label}</span>
-      <span className="text-[13px] font-medium text-gray">{value} ›</span>
+      <span className="text-[13px] font-medium text-gray-text">{value} ›</span>
     </button>
   );
 }
@@ -208,7 +208,7 @@ function TimeSheet({ alarm, onSave, onClose }: { alarm: Settings["alarm"]; onSav
           </button>
         ))}
       </div>
-      <p className="mt-3 text-center text-[13px] text-gray" aria-live="polite">
+      <p className="mt-3 text-center text-[13px] text-gray-text" aria-live="polite">
         매일 {formatTime(hour, minute)}에 알려 드려요
       </p>
       <SheetFooter>
@@ -273,12 +273,12 @@ function LangSheet({ langs, onSave, onClose }: { langs: Settings["langs"]; onSav
   return (
     <BottomSheet label="성경 언어" onClose={onClose}>
       <SheetTitle>성경 언어</SheetTitle>
-      <p className="mt-1 text-[13px] text-gray">둘 다 켜면 한 절씩 나란히 보여요</p>
+      <p className="mt-1 text-[13px] text-gray-text">둘 다 켜면 한 절씩 나란히 보여요</p>
       <Option role="checkbox" checked={langs.ko} onClick={() => change("ko")} title="한국어">
-        <span className="text-[12px] text-gray">개역한글</span>
+        <span className="text-[12px] text-gray-text">개역한글</span>
       </Option>
       <Option role="checkbox" checked={langs.en} onClick={() => change("en")} title="English">
-        <span className="text-[12px] text-gray">King James Version</span>
+        <span className="text-[12px] text-gray-text">King James Version</span>
       </Option>
       <div className="mt-4">
         <Button variant="ghost" onClick={onClose}>
@@ -315,7 +315,7 @@ function ThemeSheet({ theme, onSave, onClose }: { theme: Theme; onSave: (p: Sett
       <SheetTitle>화면 테마</SheetTitle>
       {THEMES.map((t) => (
         <Option key={t} role="radio" checked={theme === t} onClick={() => onSave({ theme: t })} title={THEME_LABELS[t]}>
-          {t === "system" && <span className="text-[12px] text-gray">기기의 밝기 설정을 따라요</span>}
+          {t === "system" && <span className="text-[12px] text-gray-text">기기의 밝기 설정을 따라요</span>}
         </Option>
       ))}
       <div className="mt-4">

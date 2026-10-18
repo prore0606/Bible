@@ -82,11 +82,11 @@ function ChapterLoader({ book, chapter }: { book: Ref["book"]; chapter: number }
   return (
     <Screen withTabBar className="items-center justify-center text-center">
       {state.status === "loading" ? (
-        <p className="text-[15px] text-gray">말씀을 불러오는 중이에요…</p>
+        <p className="text-[15px] text-gray-text">말씀을 불러오는 중이에요…</p>
       ) : (
         <>
           <p className="text-[17px] font-bold">말씀을 불러오지 못했어요</p>
-          <p className="mt-1 max-w-full break-words text-[13px] text-gray">{state.message}</p>
+          <p className="mt-1 max-w-full break-words text-[13px] text-gray-text">{state.message}</p>
           <div className="mt-5 w-40">
             <Button
               onClick={() => {

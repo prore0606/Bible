@@ -85,7 +85,7 @@ function WheelColumn({ label, items, index, onChange, className = "", small = fa
           onClick={() => onChange(i)}
           className={`flex cursor-pointer snap-center items-center justify-center font-bold ${
             small ? "text-[17px]" : "text-2xl"
-          } ${i === index ? "text-ink" : "text-gray/50"}`}
+          } ${i === index ? "text-ink" : "text-gray-text"}`}
           style={{ height: ITEM }}
         >
           {text}

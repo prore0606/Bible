@@ -41,15 +41,15 @@ export default function DonePage() {
           <br />
           포도알 하나가 맺혔어요
         </h1>
-        <p className="mt-1 text-[14px] text-gray">{completionSummary(completed, savedCount)}</p>
+        <p className="mt-1 text-[14px] text-gray-text">{completionSummary(completed, savedCount)}</p>
 
         <div className="my-2">
           <DoneArt extra={milestone} />
         </div>
 
         <div className="mb-4 text-center">
-          <div className="text-[12px] text-gray">오늘 자란 것</div>
-          <p className="mt-0.5 text-[15px] font-bold text-green">{todayMsg(growthDay)}</p>
+          <div className="text-[12px] text-gray-text">오늘 자란 것</div>
+          <p className="mt-0.5 text-[15px] font-bold text-green-text">{todayMsg(growthDay)}</p>
         </div>
 
         <Button onClick={() => router.replace("/vineyard/")}>나의 포도원 보기</Button>

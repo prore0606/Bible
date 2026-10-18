@@ -39,7 +39,7 @@ export default function BookPicker({ value, onChange }: { value: Ref; onChange: 
             aria-selected={testament === t}
             onClick={() => changeTestament(t)}
             className={`h-9 flex-1 rounded-[9px] text-[14px] font-semibold ${
-              testament === t ? "bg-card text-ink shadow-card" : "text-gray"
+              testament === t ? "bg-card text-ink shadow-card" : "text-gray-text"
             }`}
           >
             {TESTAMENT_LABELS[t]}
@@ -69,7 +69,7 @@ export default function BookPicker({ value, onChange }: { value: Ref; onChange: 
 
       <div className="mt-4 flex items-baseline justify-between">
         <span className="text-[15px] font-bold text-ink/80">{book.ko}</span>
-        <span className="text-[13px] text-gray">전체 {book.chapters}장</span>
+        <span className="text-[13px] text-gray-text">전체 {book.chapters}장</span>
       </div>
 
       <div className="scroll-hidden mt-2 grid max-h-52 grid-cols-6 gap-1.5 overflow-y-auto" role="group" aria-label="장">

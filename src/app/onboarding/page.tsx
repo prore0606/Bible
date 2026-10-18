@@ -24,7 +24,7 @@ export default function OnboardingPage() {
       {step === 0 ? (
         <section className="flex flex-1 flex-col items-center pt-4 text-center" aria-label="컨셉">
           <BookSproutArt />
-          <p className="mt-4 text-[13px] font-bold text-brand">{CONCEPT_SENTENCE}</p>
+          <p className="mt-4 text-[13px] font-bold text-brand-text">{CONCEPT_SENTENCE}</p>
           <div className="mt-2">
             <Heading>
               하루 1장,
@@ -58,7 +58,7 @@ export default function OnboardingPage() {
             </svg>
             <div>
               <div className="text-[16px] font-bold text-ink/70">마음에 드는 구절은 저장</div>
-              <div className="mt-0.5 text-[13px] text-gray">미션은 아니에요. 원할 때만!</div>
+              <div className="mt-0.5 text-[13px] text-gray-text">미션은 아니에요. 원할 때만!</div>
             </div>
           </div>
 
@@ -85,7 +85,7 @@ function MissionCard({ number, title, description }: { number: number; title: st
       <span className="text-[22px] font-extrabold text-grape">{number}</span>
       <div>
         <div className="text-[16px] font-bold">{title}</div>
-        <div className="mt-0.5 text-[13px] text-gray">{description}</div>
+        <div className="mt-0.5 text-[13px] text-gray-text">{description}</div>
       </div>
     </li>
   );

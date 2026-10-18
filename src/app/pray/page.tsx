@@ -80,17 +80,17 @@ function PrayView({ log }: { log: DayLog }) {
         <span className="h-1 flex-1 rounded-full bg-blue" />
         <span className="h-1 flex-1 rounded-full bg-blue" />
       </div>
-      <p className="pt-1.5 text-[13px] font-bold text-blue">미션 2/2 · 읽은 말씀을 떠올리며 짧게</p>
+      <p className="pt-1.5 text-[13px] font-bold text-blue-text">미션 2/2 · 읽은 말씀을 떠올리며 짧게</p>
 
-      <section className="mt-4 rounded-card bg-gradient-to-br from-green-2 to-green p-4 text-white">
-        <div className="text-[12px] opacity-85">오늘 읽은 말씀</div>
+      <section className="mt-4 rounded-card bg-gradient-to-br from-banner-from to-banner-to p-4 text-white">
+        <div className="text-[12px]">오늘 읽은 말씀</div>
         <div className="mt-1 font-bible text-[19px] font-bold">{formatRef(log.ref)}</div>
       </section>
 
       {savedToday.length > 0 && (
         <section className="mt-4" aria-label="오늘 저장한 구절">
           <div className="text-[14px] font-bold text-ink/70">
-            오늘 저장한 구절 <span className="font-medium text-gray">· 눌러서 붙이기</span>
+            오늘 저장한 구절 <span className="font-medium text-gray-text">· 눌러서 붙이기</span>
           </div>
           <ul className="mt-2 space-y-1.5">
             {savedToday.map((v) => {
@@ -109,7 +109,7 @@ function PrayView({ log }: { log: DayLog }) {
                       <path d="M6 3h12v18l-6-4-6 4z" fill="currentColor" />
                     </svg>
                     <span className="flex-1">{chipLabel(v, log.ref)}</span>
-                    {on && <span className="font-sans text-[12px] font-bold text-brand">붙임</span>}
+                    {on && <span className="font-sans text-[12px] font-bold text-brand-text">붙임</span>}
                   </button>
                 </li>
               );
@@ -125,10 +125,10 @@ function PrayView({ log }: { log: DayLog }) {
           onChange={(e) => setText(limitPrayer(e.target.value))}
           placeholder="오늘 읽은 말씀을 떠올리며 한 줄로 적어 보세요"
           rows={4}
-          className="min-h-[130px] w-full resize-none rounded-[14px] border-[1.5px] border-blue bg-card p-3.5 text-[16px] leading-[1.6] text-ink outline-none placeholder:text-gray/70"
+          className="min-h-[130px] w-full resize-none rounded-[14px] border-[1.5px] border-blue bg-card p-3.5 text-[16px] leading-[1.6] text-ink outline-none placeholder:text-gray-text"
         />
       </label>
-      <div className="mt-1 text-right text-[12px] text-gray" aria-live="polite">
+      <div className="mt-1 text-right text-[12px] text-gray-text" aria-live="polite">
         {prayerCounter(text)}
       </div>
 

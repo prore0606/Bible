@@ -7,7 +7,7 @@ export default function AdOverlay({ message }: { message: string }) {
       role="alert"
       className="fixed inset-0 z-50 flex flex-col items-center justify-center gap-3 bg-ink px-6 text-center text-bg"
     >
-      <span className="rounded bg-gold px-2 py-0.5 text-[12px] font-bold text-ink">광고</span>
+      <span className="rounded bg-gold px-2 py-0.5 text-[12px] font-bold text-on-gold">광고</span>
       <Mascot size={64} />
       <b className="text-[17px]">보상형 광고 영역</b>
       <p className="text-[13px] opacity-75">{message}</p>

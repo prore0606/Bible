@@ -68,7 +68,7 @@ function VineyardView() {
           <b className="text-grape">{day}일째</b>
         </span>
         {hidden > 0 && (
-          <span className="absolute top-3 right-3 rounded-full bg-card px-3 py-1.5 text-[13px] font-medium text-gray shadow-card">
+          <span className="absolute top-3 right-3 rounded-full bg-card px-3 py-1.5 text-[13px] font-medium text-gray-text shadow-card">
             이전 나무 {hidden}그루 더
           </span>
         )}
@@ -82,7 +82,7 @@ function VineyardView() {
 
       <section className="mt-4" aria-label="이번 단계">
         <h2 className="text-[18px] font-extrabold tracking-[-0.3px]">{stage}</h2>
-        <p className="mt-0.5 min-h-[20px] text-[14px] font-semibold text-green">{todayMsg(day)}</p>
+        <p className="mt-0.5 min-h-[20px] text-[14px] font-semibold text-green-text">{todayMsg(day)}</p>
       </section>
 
       <div className="mt-3 grid grid-cols-3 gap-2">
@@ -102,7 +102,7 @@ function VineyardView() {
 function Stat({ label, value, accent = false }: { label: string; value: string; accent?: boolean }) {
   return (
     <div className="rounded-card bg-card px-3 py-2.5 shadow-card">
-      <div className="text-[12px] text-gray">{label}</div>
+      <div className="text-[12px] text-gray-text">{label}</div>
       <div className={`mt-1 text-[17px] font-extrabold ${accent ? "text-grape" : ""}`}>{value}</div>
     </div>
   );

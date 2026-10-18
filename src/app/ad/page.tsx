@@ -41,7 +41,7 @@ export default function AdPage() {
   return (
     <main className="flex flex-1 flex-col bg-ink px-4 pt-[calc(16px+env(safe-area-inset-top))] pb-[calc(24px+env(safe-area-inset-bottom))] text-bg">
       <div className="flex items-center justify-between">
-        <span className="rounded bg-gold px-2 py-0.5 text-[12px] font-bold text-ink">광고</span>
+        <span className="rounded bg-gold px-2 py-0.5 text-[12px] font-bold text-on-gold">광고</span>
         <span className="text-[13px] opacity-70">곧 넘어가요…</span>
       </div>
       <div className="mt-4 flex flex-1 flex-col items-center justify-center gap-1.5 rounded-card border-[1.5px] border-dashed border-bg/40 text-center">

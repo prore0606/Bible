@@ -9,10 +9,19 @@
   --green-light: #e5f7ee;
   --brand: #f5a623;
   --butter: #fff4dc;
-  --butter-text: #e8971a;
+  /* 글자로 쓰는 색(대비 4.5 이상). 아이콘·채움·배경은 위의 원래 색(gray, green, brand)을 그대로 쓴다 — docs/contrast.md */
+  --blue-text: #1b64da; /* 작은 파란 글자(링크·단계 표시) 대비 5.4. 파란 버튼·채움은 --blue 그대로 */
+  --on-gold: #191f28; /* 노란(gold) 라벨 위 글자 — 테마와 관계없이 어두운 글자 */
+  --gray-text: #5f6b7a;
+  --green-text: #146b45;
+  --brand-text: #9a5f00;
+  --butter-text: #9a5f0a;
+  /* 말씀 배너(홈·기도 화면)의 초록 그라데이션: 흰 글자 대비 5.0~6.2. 두 테마 공통 */
+  --banner-from: #188050;
+  --banner-to: #166f48;
   --highlight: #fff3c4;
   --gold: #ffb938;
-  --grape: #7c5cdb;
+  --grape: #6b49cf; /* 글자·아이콘용 보라: 흰/크림 배경 위 대비 5.4 */
   --grape-light: #a58bf0;
   /* 흰 글자가 올라가는 보라 채움(버튼·오늘 칸). --grape 는 글자·아이콘용이라 다크에서 밝아진다 */
   --grape-solid: #7c5cdb;
@@ -22,6 +31,9 @@
   --card: #ffffff;
   --cream-1: #fff8ec;
   --cream-2: #ffe9b8;
+  /* 스플래시·첫 씨앗 화면의 바탕. 다크에서는 어두워진다 (포도원 하늘의 cream 은 그림이라 그대로) */
+  --warm-from: #fff8ec;
+  --warm-to: #ffe9b8;
   --ink: #191f28;
   --gray: #8b95a1;
   --line: #eef0f3;
@@ -47,6 +59,13 @@
     --grape: #a58bf0; /* 글자: 카드 위 대비 5.7 */
     --grape-light: #7c5cdb; /* 달력의 완료 칸 (흰 숫자 대비 4.8) */
     --on-blue: #0b1a33; /* 파란 버튼 글자 (대비 5.7) */
+    --blue-text: #4c93ff;
+    --gray-text: #9aa3ae;
+    --green-text: #4cc38a;
+    --brand-text: #f5a623;
+    --butter-text: #e8971a;
+    --warm-from: #1c1b20;
+    --warm-to: #2a2619;
     color-scheme: dark;
   }
 }
@@ -67,6 +86,13 @@
   --grape: #a58bf0; /* 글자: 카드 위 대비 5.7 */
   --grape-light: #7c5cdb; /* 달력의 완료 칸 (흰 숫자 대비 4.8) */
   --on-blue: #0b1a33; /* 파란 버튼 글자 (대비 5.7) */
+  --blue-text: #4c93ff;
+  --gray-text: #9aa3ae;
+  --green-text: #4cc38a;
+  --brand-text: #f5a623;
+  --butter-text: #e8971a;
+  --warm-from: #1c1b20;
+  --warm-to: #2a2619;
   color-scheme: dark;
 }
 
@@ -78,6 +104,13 @@
   --color-green-light: var(--green-light);
   --color-brand: var(--brand);
   --color-butter: var(--butter);
+  --color-blue-text: var(--blue-text);
+  --color-on-gold: var(--on-gold);
+  --color-gray-text: var(--gray-text);
+  --color-green-text: var(--green-text);
+  --color-brand-text: var(--brand-text);
+  --color-banner-from: var(--banner-from);
+  --color-banner-to: var(--banner-to);
   --color-butter-text: var(--butter-text);
   --color-highlight: var(--highlight);
   --color-gold: var(--gold);
@@ -89,6 +122,8 @@
   --color-card: var(--card);
   --color-cream-1: var(--cream-1);
   --color-cream-2: var(--cream-2);
+  --color-warm-from: var(--warm-from);
+  --color-warm-to: var(--warm-to);
   --color-ink: var(--ink);
   --color-gray: var(--gray);
   --color-line: var(--line);

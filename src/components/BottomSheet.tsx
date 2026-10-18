@@ -34,7 +34,7 @@ export default function BottomSheet({ label, onClose, children }: Props) {
           type="button"
           aria-label="닫기"
           onClick={onClose}
-          className="absolute top-4 right-5 flex h-8 w-8 items-center justify-center text-[18px] text-gray"
+          className="absolute top-4 right-5 flex h-8 w-8 items-center justify-center text-[18px] text-gray-text"
         >
           ✕
         </button>

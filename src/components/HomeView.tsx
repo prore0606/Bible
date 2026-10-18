@@ -91,10 +91,10 @@ export default function HomeView() {
         <section className="row-span-2 flex flex-col justify-between rounded-card bg-card p-4 shadow-card">
           <div>
             <h2 className="text-[15px] font-bold leading-[1.35]">오늘의 미션</h2>
-            <p className="mt-1 text-[13px] text-gray">{formatRef(ref)}</p>
+            <p className="mt-1 text-[13px] text-gray-text">{formatRef(ref)}</p>
           </div>
           <div className="mt-6">
-            <div className="text-[13px] font-bold text-blue">2단계 중 {done} 완료</div>
+            <div className="text-[13px] font-bold text-blue-text">2단계 중 {done} 완료</div>
             <div className="mt-1.5 h-[6px] overflow-hidden rounded-full bg-line" aria-hidden="true">
               <div className="h-full rounded-full bg-blue" style={{ width: `${progressPercent(mission)}%` }} />
             </div>
@@ -106,13 +106,13 @@ export default function HomeView() {
 
       <Link
         href={latest ? "/records/?tab=saved" : "/read/"}
-        className="relative block min-h-[132px] overflow-hidden rounded-card bg-gradient-to-br from-green-2 to-green p-4 text-white"
+        className="relative block min-h-[132px] overflow-hidden rounded-card bg-gradient-to-br from-banner-from to-banner-to p-4 text-white"
       >
-        <div className="text-[12px] opacity-85">{latest ? "최근 저장한 말씀 ›" : "오늘의 말씀 ›"}</div>
+        <div className="text-[12px]">{latest ? "최근 저장한 말씀 ›" : "오늘의 말씀 ›"}</div>
         <p className="mt-2 line-clamp-3 max-w-[78%] font-bible text-[17px] leading-[1.55] font-bold">
           {bannerText ?? " "}
         </p>
-        <div className="mt-1.5 text-[12px] opacity-80">
+        <div className="mt-1.5 text-[12px]">
           {formatRef(bannerRef).replace("장", "")}:{bannerVerse}
         </div>
         <svg viewBox="0 0 100 100" className="absolute right-1 -bottom-2 h-24 w-24" aria-hidden="true">
@@ -195,7 +195,7 @@ function MissionRow({
         )}
       </span>
       <span className="text-[15px] font-semibold">{label}</span>
-      <span className={`ml-auto text-[13px] ${href ? "font-bold text-blue" : "text-gray"}`}>{right}</span>
+      <span className={`ml-auto text-[13px] ${href ? "font-bold text-blue-text" : "text-gray-text"}`}>{right}</span>
     </>
   );
   const className = `flex items-center gap-2.5 py-3.5 ${divider ? "border-t border-line" : ""}`;

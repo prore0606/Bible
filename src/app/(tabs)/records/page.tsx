@@ -86,7 +86,7 @@ function RecordsView() {
     <Screen withTabBar>
       <header className="flex items-center justify-between pb-2">
         <h1 className="text-[20px] font-extrabold tracking-[-0.4px]">기록</h1>
-        <span className="rounded-full bg-line px-3.5 py-1.5 text-[13px] font-medium text-gray">{month}월</span>
+        <span className="rounded-full bg-line px-3.5 py-1.5 text-[13px] font-medium text-gray-text">{month}월</span>
       </header>
 
       <div role="tablist" aria-label="기록 종류" className="flex gap-5 border-b border-line">
@@ -120,7 +120,7 @@ function RecordsView() {
           )}
 
           {cards.length === 0 ? (
-            <p className="mt-6 text-center text-[14px] leading-[1.6] text-gray">
+            <p className="mt-6 text-center text-[14px] leading-[1.6] text-gray-text">
               아직 남긴 기도가 없어요.
               <br />
               오늘 첫 기도를 남기면 여기에 카드로 쌓여요.
@@ -136,14 +136,14 @@ function RecordsView() {
       ) : (
         <div role="tabpanel" aria-label="저장한 구절" className="mt-3">
           {savedVerses.length === 0 ? (
-            <p className="mt-6 text-center text-[14px] leading-[1.6] text-gray">
+            <p className="mt-6 text-center text-[14px] leading-[1.6] text-gray-text">
               저장한 구절이 없어요.
               <br />
               읽다가 마음에 드는 구절을 누르면 여기에 저장돼요.
             </p>
           ) : (
             <>
-              <p className="mb-2 text-[12px] text-gray">카드를 길게 누르면 삭제해요</p>
+              <p className="mb-2 text-[12px] text-gray-text">카드를 길게 누르면 삭제해요</p>
               <ul className="flex flex-col gap-2">
                 {savedVerses.map((verse) => (
                   <SavedVerseCard key={verse.id} verse={verse} onDelete={() => void removeVerse(verse.id)} />
@@ -179,7 +179,7 @@ function TabButton({
       role="tab"
       aria-selected={on}
       onClick={() => onSelect(value)}
-      className={`-mb-px border-b-[2.5px] pb-2.5 text-[15px] ${on ? "border-ink font-bold text-ink" : "border-transparent text-gray"}`}
+      className={`-mb-px border-b-[2.5px] pb-2.5 text-[15px] ${on ? "border-ink font-bold text-ink" : "border-transparent text-gray-text"}`}
     >
       {children}
     </button>
@@ -203,7 +203,7 @@ function CalendarCard({
         <span>이번 달 맺은 포도알</span>
         <span className="text-grape">{completed}알</span>
       </div>
-      <div className="mt-3 grid grid-cols-7 gap-1 text-center text-[11px] text-gray" aria-hidden="true">
+      <div className="mt-3 grid grid-cols-7 gap-1 text-center text-[11px] text-gray-text" aria-hidden="true">
         {WEEKDAY_LABELS.map((w) => (
           <span key={w}>{w}</span>
         ))}
@@ -220,10 +220,10 @@ function CalendarCard({
                 cell.status === "completed"
                   ? cell.isToday
                     ? "bg-grape-solid text-white"
-                    : "bg-grape-light text-white"
+                    : "bg-grape-solid text-white"
                   : cell.status === "revived"
                     ? "border-2 border-grape-light text-grape"
-                    : "bg-line text-gray"
+                    : "bg-line text-gray-text"
               } ${cell.isToday ? "ring-2 ring-gold" : ""}`}
             >
               {cell.day}
@@ -238,7 +238,7 @@ function CalendarCard({
 function PrayerCardView({ card }: { card: PrayerCard }) {
   return (
     <li className="rounded-card bg-card p-4 shadow-card">
-      <div className="flex items-center justify-between text-[12px] text-gray">
+      <div className="flex items-center justify-between text-[12px] text-gray-text">
         <span>
           {formatMonthDay(card.date)} · {formatRef(card.ref)}
         </span>
@@ -248,7 +248,7 @@ function PrayerCardView({ card }: { card: PrayerCard }) {
       </div>
       {card.verse && (
         <p className="mt-2 border-l-[3px] border-green pl-2.5 font-bible text-[14px] leading-[1.55] font-bold">
-          {card.verse.preview} <span className="font-sans text-[12px] font-medium text-gray">({card.verse.label})</span>
+          {card.verse.preview} <span className="font-sans text-[12px] font-medium text-gray-text">({card.verse.label})</span>
         </p>
       )}
       <p className="mt-2 text-[15px] leading-[1.6]">{card.prayer}</p>
@@ -266,7 +266,7 @@ function SavedVerseCard({ verse, onDelete }: { verse: SavedVerse; onDelete: () =
       onKeyDown={(e) => (e.key === "Delete" || e.key === "Backspace") && onDelete()}
       className="relative touch-pan-y rounded-card bg-card p-4 shadow-card select-none"
     >
-      <div className="flex items-center gap-1.5 text-[12px] font-bold text-green">
+      <div className="flex items-center gap-1.5 text-[12px] font-bold text-green-text">
         <svg width="12" height="12" viewBox="0 0 24 24" aria-hidden="true">
           <path d="M6 3h12v18l-6-4-6 4z" fill="currentColor" />
         </svg>

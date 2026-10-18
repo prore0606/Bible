@@ -9,7 +9,7 @@ export function FontSizeButton({ fontSize, onCycle }: { fontSize: FontSize; onCy
       type="button"
       aria-label={`글자 크기 바꾸기 (지금: ${FONT_LABELS[fontSize]})`}
       onClick={onCycle}
-      className="flex items-baseline gap-0.5 rounded-full bg-line px-3.5 py-1.5 font-bold text-gray active:opacity-80"
+      className="flex items-baseline gap-0.5 rounded-full bg-line px-3.5 py-1.5 font-bold text-gray-text active:opacity-80"
     >
       <span className="text-[12px]">가</span>
       <span className="text-[17px]">가</span>
@@ -21,7 +21,7 @@ export function FontSizeButton({ fontSize, onCycle }: { fontSize: FontSize; onCy
 export function LangToggle({ langs, onChange }: { langs: Langs; onChange: (lang: keyof Langs) => void }) {
   return (
     <div className="px-4 pt-2.5">
-      <div className="mb-1.5 text-[12px] text-gray">본문 언어 · 복수 선택 가능</div>
+      <div className="mb-1.5 text-[12px] text-gray-text">본문 언어 · 복수 선택 가능</div>
       <div className="flex gap-1.5">
         {(["ko", "en"] as const).map((lang) => (
           <button
@@ -30,7 +30,7 @@ export function LangToggle({ langs, onChange }: { langs: Langs; onChange: (lang:
             aria-pressed={langs[lang]}
             onClick={() => onChange(lang)}
             className={`h-9 flex-1 rounded-full border-[1.5px] text-[14px] font-semibold ${
-              langs[lang] ? "border-blue bg-blue text-on-blue" : "border-line bg-card text-gray"
+              langs[lang] ? "border-blue bg-blue text-on-blue" : "border-line bg-card text-gray-text"
             }`}
           >
             {langs[lang] && "✓ "}

@@ -40,8 +40,8 @@ function AppGate({ children }: { children: React.ReactNode }) {
     return (
       <Screen className="items-center justify-center text-center">
         <h1 className="text-xl font-extrabold">앱을 시작하지 못했어요</h1>
-        <p className="mt-2 text-[15px] text-gray">저장소를 여는 중 문제가 생겼어요.</p>
-        {error && <p className="mt-2 max-w-full break-words text-[12px] text-gray/70">{error}</p>}
+        <p className="mt-2 text-[15px] text-gray-text">저장소를 여는 중 문제가 생겼어요.</p>
+        {error && <p className="mt-2 max-w-full break-words text-[12px] text-gray-text">{error}</p>}
         <div className="mt-6 w-48">
           <Button
             onClick={() => {

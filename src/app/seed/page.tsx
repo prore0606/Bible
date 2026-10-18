@@ -24,7 +24,7 @@ export default function SeedPage() {
   }, []);
 
   return (
-    <main className="flex flex-1 flex-col items-center bg-gradient-to-b from-cream-1 to-butter px-4 pt-[calc(56px+env(safe-area-inset-top))] text-center">
+    <main className="flex flex-1 flex-col items-center bg-gradient-to-b from-warm-from to-butter px-4 pt-[calc(56px+env(safe-area-inset-top))] text-center">
       <FirstSeedArt />
       <div className="mt-2">
         <Heading>첫 씨앗을 심었어요!</Heading>

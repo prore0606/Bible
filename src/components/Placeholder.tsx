@@ -6,7 +6,7 @@ export default function Placeholder({ no, title, path }: Props) {
     <main className="flex flex-1 flex-col items-center justify-center gap-1 px-4 pb-20 text-center">
       <span className="text-xs font-extrabold text-grape">{no}</span>
       <h1 className="text-xl font-extrabold">{title}</h1>
-      <p className="text-sm text-gray">{path}</p>
+      <p className="text-sm text-gray-text">{path}</p>
     </main>
   );
 }

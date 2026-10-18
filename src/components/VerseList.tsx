@@ -23,11 +23,11 @@ export default function VerseList({ rows, saved, fontPx, onToggle }: Props) {
         const isSaved = saved.has(row.verse);
         const content = (
           <>
-            <span className="min-w-[16px] pt-[5px] text-[12px] font-extrabold text-green">{row.verse}</span>
+            <span className="min-w-[16px] pt-[5px] text-[12px] font-extrabold text-green-text">{row.verse}</span>
             <span className="block flex-1 pr-5">
               {row.ko !== undefined && (
                 <span
-                  className={`block font-bible leading-[1.75] ${note ? "text-gray italic" : "text-ink"}`}
+                  className={`block font-bible leading-[1.75] ${note ? "text-gray-text italic" : "text-ink"}`}
                   style={{ fontSize: fontPx }}
                 >
                   {row.ko}
@@ -35,7 +35,7 @@ export default function VerseList({ rows, saved, fontPx, onToggle }: Props) {
               )}
               {row.en !== undefined && (
                 <span
-                  className={`block font-sans leading-[1.6] ${both ? "mt-0.5 text-gray" : "text-ink"}`}
+                  className={`block font-sans leading-[1.6] ${both ? "mt-0.5 text-gray-text" : "text-ink"}`}
                   style={{ fontSize: both ? fontPx * 0.85 : fontPx }}
                 >
                   {row.en}

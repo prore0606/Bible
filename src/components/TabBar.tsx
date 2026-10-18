@@ -60,11 +60,12 @@ export default function TabBar() {
             href={tab.href}
             aria-current={on ? "page" : undefined}
             className={`flex w-16 flex-col items-center gap-0.5 text-[10px] ${
-              on ? "font-bold text-brand" : "text-gray"
+              on ? "font-bold text-brand-text" : "text-gray-text"
             }`}
           >
             <svg
               viewBox="0 0 24 24"
+              className={on ? "text-brand" : undefined}
               width="20"
               height="20"
               fill={on && tab.href === "/home/" ? "currentColor" : "none"}

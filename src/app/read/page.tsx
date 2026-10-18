@@ -48,11 +48,11 @@ export default function ReadPage() {
   return (
     <main className="flex flex-1 flex-col items-center justify-center px-4 text-center">
       {state.status === "loading" ? (
-        <p className="text-[15px] text-gray">말씀을 불러오는 중이에요…</p>
+        <p className="text-[15px] text-gray-text">말씀을 불러오는 중이에요…</p>
       ) : (
         <>
           <p className="text-[17px] font-bold">말씀을 불러오지 못했어요</p>
-          <p className="mt-1 max-w-full break-words text-[13px] text-gray">{state.message}</p>
+          <p className="mt-1 max-w-full break-words text-[13px] text-gray-text">{state.message}</p>
           <div className="mt-5 w-40">
             <Button
               onClick={() => {
@@ -105,8 +105,8 @@ function ReadView({ at, ko, en }: Loaded) {
         <span className="h-1 flex-1 rounded-full bg-blue" />
         <span className="h-1 flex-1 rounded-full bg-line" />
       </div>
-      <p className="shrink-0 px-4 pt-1.5 text-[13px] font-bold text-blue">
-        미션 1/2 · 1장 읽기 <span className="font-medium text-gray">· 구절을 누르면 저장</span>
+      <p className="shrink-0 px-4 pt-1.5 text-[13px] font-bold text-blue-text">
+        미션 1/2 · 1장 읽기 <span className="font-medium text-gray-text">· 구절을 누르면 저장</span>
       </p>
 
       <div className="shrink-0">
@@ -123,7 +123,7 @@ function ReadView({ at, ko, en }: Loaded) {
       </div>
 
       <div className="shrink-0 px-4 pt-2 pb-[calc(16px+env(safe-area-inset-bottom))]">
-        <div className="mb-1.5 flex justify-between text-[12px] text-gray">
+        <div className="mb-1.5 flex justify-between text-[12px] text-gray-text">
           <span>{reader.reachedEnd ? "끝까지 읽었어요" : "끝까지 읽으면 버튼이 켜져요"}</span>
           <span>
             {reader.shown} / {reader.rows.length}절

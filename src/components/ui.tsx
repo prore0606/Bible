@@ -8,7 +8,7 @@ export function Button({ variant = "primary", className = "", type = "button", .
   const styles =
     variant === "primary"
       ? "h-14 rounded-button bg-blue text-[17px] font-bold text-on-blue active:opacity-90"
-      : "h-11 rounded-button text-[15px] font-medium text-gray";
+      : "h-11 rounded-button text-[15px] font-medium text-gray-text";
   return <button type={type} className={`${base} ${styles} ${className}`} {...rest} />;
 }
 
@@ -65,7 +65,7 @@ export function PillButton({ children, onClick }: { children: ReactNode; onClick
     <button
       type="button"
       onClick={onClick}
-      className="rounded-full bg-line px-3.5 py-1.5 text-[13px] font-medium text-gray active:opacity-80"
+      className="rounded-full bg-line px-3.5 py-1.5 text-[13px] font-medium text-gray-text active:opacity-80"
     >
       {children}
     </button>
@@ -82,5 +82,5 @@ export function Heading({ children, size = "lg" }: { children: ReactNode; size?:
 }
 
 export function SubText({ children, className = "" }: { children: ReactNode; className?: string }) {
-  return <p className={`mt-2 text-[15px] leading-[1.6] text-gray ${className}`}>{children}</p>;
+  return <p className={`mt-2 text-[15px] leading-[1.6] text-gray-text ${className}`}>{children}</p>;
 }

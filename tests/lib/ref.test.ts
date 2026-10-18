@@ -1,5 +1,15 @@
 import { describe, expect, it } from "vitest";
-import { DEFAULT_START, TESTAMENT_LABELS, chapterNumbers, formatRef, pickBook, pickChapter, pickTestament } from "@/lib/ref";
+import {
+  DEFAULT_START,
+  TESTAMENT_LABELS,
+  bibleHref,
+  chapterNumbers,
+  formatRef,
+  parseRefParams,
+  pickBook,
+  pickChapter,
+  pickTestament,
+} from "@/lib/ref";
 
 describe("formatRef", () => {
   it("책 이름과 장", () => {
@@ -41,5 +51,34 @@ describe("고르기 규칙 (spec 5장 05)", () => {
 
   it("탭 이름은 권 수를 포함한다", () => {
     expect(TESTAMENT_LABELS).toEqual({ OT: "구약 39권", NT: "신약 27권" });
+  });
+});
+
+describe("parseRefParams · bibleHref (자유 읽기 주소)", () => {
+  it("올바른 책과 장을 읽는다", () => {
+    expect(parseRefParams("PSA", "23")).toEqual({ book: "PSA", chapter: 23 });
+    expect(parseRefParams("GEN", "1")).toEqual({ book: "GEN", chapter: 1 });
+    expect(parseRefParams("1JN", "5")).toEqual({ book: "1JN", chapter: 5 });
+  });
+
+  it("없는 책·없는 장·이상한 값은 undefined", () => {
+    expect(parseRefParams("XXX", "1")).toBeUndefined();
+    expect(parseRefParams("OBA", "2")).toBeUndefined();
+    expect(parseRefParams("PSA", "151")).toBeUndefined();
+    expect(parseRefParams("PSA", "0")).toBeUndefined();
+    expect(parseRefParams("PSA", "-1")).toBeUndefined();
+    expect(parseRefParams("PSA", "1.5")).toBeUndefined();
+    expect(parseRefParams("PSA", "abc")).toBeUndefined();
+    expect(parseRefParams("PSA", "0023")).toBeUndefined();
+    expect(parseRefParams(null, "1")).toBeUndefined();
+    expect(parseRefParams("PSA", null)).toBeUndefined();
+    expect(parseRefParams("gen", "1")).toBeUndefined(); // 코드는 대문자만
+  });
+
+  it("bibleHref 와 parseRefParams 는 서로 되돌려진다", () => {
+    const ref = { book: "PSA", chapter: 119 } as const;
+    expect(bibleHref(ref)).toBe("/bible/?book=PSA&chapter=119");
+    const params = new URLSearchParams(bibleHref(ref).split("?")[1]);
+    expect(parseRefParams(params.get("book"), params.get("chapter"))).toEqual(ref);
   });
 });

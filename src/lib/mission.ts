@@ -36,6 +36,13 @@ export function nextRef(ref: Ref): Ref {
   return { book: nextBook.code, chapter: 1 };
 }
 
+/** 이전 장. 책의 첫 장이면 이전 책의 마지막 장, 창세기 1장 이전은 요한계시록 22장 (자유 읽기의 "이전 장"). */
+export function prevRef(ref: Ref): Ref {
+  if (ref.chapter > 1) return { book: ref.book, chapter: ref.chapter - 1 };
+  const prevBook = BOOKS[(bookIndex(ref.book) + BOOKS.length - 1) % BOOKS.length];
+  return { book: prevBook.code, chapter: prevBook.chapters };
+}
+
 /** 오늘 미션 상태 3가지: 시작 전 → 읽기 완료 → 미션 완료 */
 export function missionStatus(log: DayLog | undefined): MissionStatus {
   if (!log) return "before";

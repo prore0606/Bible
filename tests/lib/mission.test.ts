@@ -10,6 +10,7 @@ import {
   missionStatus,
   nextRef,
   normalizePrayer,
+  prevRef,
   startMission,
 } from "@/lib/mission";
 
@@ -49,6 +50,33 @@ describe("nextRef (다음 장 이동)", () => {
     let ref: Ref = GEN1;
     for (let i = 0; i < 1189; i += 1) ref = nextRef(ref);
     expect(ref).toEqual(GEN1);
+  });
+});
+
+describe("prevRef (이전 장)", () => {
+  it("같은 책의 이전 장", () => {
+    expect(prevRef({ book: "GEN", chapter: 2 })).toEqual(GEN1);
+    expect(prevRef({ book: "PSA", chapter: 24 })).toEqual({ book: "PSA", chapter: 23 });
+  });
+
+  it("책의 첫 장이면 이전 책의 마지막 장", () => {
+    expect(prevRef({ book: "EXO", chapter: 1 })).toEqual({ book: "GEN", chapter: 50 });
+    expect(prevRef({ book: "PRO", chapter: 1 })).toEqual({ book: "PSA", chapter: 150 });
+    expect(prevRef({ book: "MAT", chapter: 1 })).toEqual({ book: "MAL", chapter: 4 });
+    expect(prevRef({ book: "JON", chapter: 1 })).toEqual({ book: "OBA", chapter: 1 });
+  });
+
+  it("창세기 1장 이전은 요한계시록 22장", () => {
+    expect(prevRef(GEN1)).toEqual({ book: "REV", chapter: 22 });
+  });
+
+  it("nextRef 와 서로 되돌려진다 (1,189장 전부)", () => {
+    let ref: Ref = GEN1;
+    for (let i = 0; i < 1189; i += 1) {
+      const next = nextRef(ref);
+      expect(prevRef(next)).toEqual(ref);
+      ref = next;
+    }
   });
 });
 

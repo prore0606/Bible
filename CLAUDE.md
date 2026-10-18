@@ -12,7 +12,9 @@
 - Next.js 16(App Router, 정적 export `output: 'export'`) + React + TypeScript + Tailwind v4 + zustand. 서버 기능(API Route, Server Action, middleware, redirect 설정)은 쓰지 않는다. 라우팅은 `src/app/` 폴더 = 경로 1개. 화면에서 SQLite·Capacitor 플러그인·`window`는 클라이언트 컴포넌트의 `useEffect` 안에서만 쓴다.
 - Next.js 16은 기존과 달라진 점이 많다. 새 API를 쓰기 전에 `node_modules/next/dist/docs/`의 해당 문서를 먼저 읽는다 (`AGENTS.md` 참고).
 - Capacitor(앱 ID `kr.co.prore.malsseumsup`): @capacitor-community/sqlite, local-notifications, @capacitor-community/admob, splash-screen, status-bar, app
-- 성경 본문: `public/bible/{ko,en}/{BOOK}.json`, 구조 `{ code, name, chapters: string[][] }`. 한국어 개역한글, 영어 KJV.
+- 성경 본문: `public/bible/{ko,en}/{BOOK}.json`, 구조 `{ code, name, chapters: string[][] }`. 한국어 개역한글, 영어 KJV. 읽는 코드는 `src/lib/bible.ts`.
+- 본문 JSON은 `scripts/build-bible.mjs`로 만든 결과물이다. **손으로 고치지 않는다.** 고칠 곳은 스크립트의 `KRV_FIXES`에 이유와 함께 추가하고 다시 생성한다. 출처·라이선스·검수 목록은 `docs/bible-data.md`.
+- 절 번호는 KJV 기준이다(한·영 짝맞춤은 위치가 아니라 **절 번호**로). "(N절에 포함되어 있음)" 문구는 `isMergedVerseNote()`로 구별해 저장·기도 연결에서 뺀다.
 - 규칙 로직은 `src/lib/`의 순수 함수(date, mission, streak, growth, ads, notify)로 만들고 단위 테스트를 둔다.
 
 ## 데이터베이스

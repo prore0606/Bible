@@ -34,6 +34,11 @@ yarn-error.log*
 .env*
 !.env.example
 
+# 안드로이드 서명 키 — 절대 올리지 않는다 (docs/release-checklist.md 4항)
+*.jks
+*.keystore
+keystore.properties
+
 # vercel
 .vercel
 

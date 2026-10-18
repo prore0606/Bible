@@ -8,6 +8,8 @@ const config: CapacitorConfig = {
     // 스플래시는 웹 화면(SplashView)이 대신하므로 네이티브 스플래시는 바로 숨긴다 (AppProvider 에서 hide)
     SplashScreen: { launchShowDuration: 0 },
     CapacitorSQLite: { androidIsEncryption: false },
+    // 알림 작은 아이콘 (android/app/src/main/res/drawable/ic_stat_malsseumsup.xml, 단색 포도송이)
+    LocalNotifications: { smallIcon: "ic_stat_malsseumsup", iconColor: "#7C5CDB" },
   },
 };
 

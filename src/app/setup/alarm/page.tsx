@@ -57,7 +57,7 @@ export default function SetupAlarmPage() {
               aria-pressed={on}
               onClick={() => setTime(toWheel(q.hour, q.minute))}
               className={`flex-1 rounded-[12px] py-3 text-[14px] font-semibold shadow-card ${
-                on ? "bg-blue text-white" : "bg-card text-ink"
+                on ? "bg-blue text-on-blue" : "bg-card text-ink"
               }`}
             >
               {q.label}

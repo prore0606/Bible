@@ -27,7 +27,7 @@ export default function VerseList({ rows, saved, fontPx, onToggle }: Props) {
             <span className="block flex-1 pr-5">
               {row.ko !== undefined && (
                 <span
-                  className={`block font-bible leading-[1.75] ${note ? "text-gray-text italic" : "text-ink"}`}
+                  className={`block break-keep font-bible leading-[1.75] ${note ? "text-gray-text italic" : "text-ink"}`}
                   style={{ fontSize: fontPx }}
                 >
                   {row.ko}

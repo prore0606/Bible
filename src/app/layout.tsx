@@ -1,5 +1,8 @@
 import type { Metadata, Viewport } from "next";
+import "pretendard/dist/web/variable/pretendardvariable.css";
+import "@/styles/nanum-myeongjo.css";
 import "./globals.css";
+import AppProvider from "@/components/AppProvider";
 
 export const metadata: Metadata = {
   title: "성경-말씀숲",
@@ -17,7 +20,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="ko" className="h-full">
       <body className="min-h-full">
         <div className="mx-auto flex min-h-dvh w-full max-w-[480px] flex-col bg-bg">
-          {children}
+          <AppProvider>{children}</AppProvider>
         </div>
       </body>
     </html>

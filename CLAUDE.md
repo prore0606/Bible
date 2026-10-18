@@ -32,6 +32,9 @@
 - UI 글꼴 Pretendard, 한국어 본문 나눔명조 17px / 줄간격 1.75
 - 마스코트(`#mascot`)와 포도원 그림(`vineG`, `scene`, `todayMsg`, `nextMsg`)은 screens.html에서 그대로 옮긴다. 새로 그리지 않는다.
 - 탭바 4개: 홈 · 성경 · 포도원 · 기록. 설정은 홈 오른쪽 위.
+- 글꼴은 앱에 번들한다(Pretendard 가변 + 나눔명조 400·700). 나눔명조 CSS는 `scripts/gen-fonts.mjs`가 만든 `src/styles/nanum-myeongjo.css`(woff2만) — 패키지 CSS를 직접 import하지 않는다(woff가 이중으로 들어감).
+- 공통 부품: `src/components/ui.tsx`(Button, Screen, BottomBar …), `BookPicker`, `TimeWheel`(설정에서 재사용). 일러스트(`components/art/`)의 SVG 색은 원본 그대로 두는 예외다.
+- 경로 보호는 `src/lib/routeGuard.ts`(첫 실행 전에는 01~07 화면만, 마친 뒤에는 온보딩·시작 설정 화면 차단). `AppProvider`가 저장소를 연 뒤에만 화면을 보여 준다.
 
 ## 핵심 규칙
 - 날짜 = 기기 현지 날짜(`YYYY-MM-DD`), 자정에 바뀜. 미션은 읽기를 시작한 날짜에 기록.

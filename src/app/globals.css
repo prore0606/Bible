@@ -87,9 +87,22 @@
 
   --shadow-card: 0 1px 2px rgba(0, 0, 0, 0.03), 0 4px 14px rgba(0, 0, 0, 0.04);
 
-  /* 글꼴은 앱에 포함시키기 전까지 시스템 글꼴로 대체된다 (T3 이후 번들) */
-  --font-sans: "Pretendard", -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  /* 글꼴은 앱에 포함된다: Pretendard(가변, UI) · 나눔명조(성경 본문). 없을 때만 시스템 글꼴로 대체 */
+  --font-sans: "Pretendard Variable", "Pretendard", -apple-system, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
   --font-bible: "Nanum Myeongjo", "KoPub Batang", serif;
+}
+
+/* 스크롤바를 숨긴다 (휠·목록처럼 스크롤은 되지만 막대는 보이지 않게) */
+.scroll-hidden {
+  scrollbar-width: none;
+}
+.scroll-hidden::-webkit-scrollbar {
+  display: none;
+}
+
+button {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
 }
 
 body {

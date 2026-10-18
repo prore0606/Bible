@@ -39,3 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# 브라우저 개발용 SQLite wasm (scripts/copy-wasm.mjs가 복사)
+/public/assets/sql-wasm.wasm

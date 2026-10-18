@@ -9,7 +9,8 @@
 - 로그인 없음. 모든 데이터는 기기 안 SQLite(`malsseumsup.db`)에 저장. 스키마 기준은 `db/sqlite/001_init.sql` (웹 개발 중에는 jeep-sqlite).
 
 ## 기술
-- Vite + React + TypeScript + Tailwind + react-router-dom + zustand
+- Next.js 16(App Router, 정적 export `output: 'export'`) + React + TypeScript + Tailwind v4 + zustand. 서버 기능(API Route, Server Action, middleware, redirect 설정)은 쓰지 않는다. 라우팅은 `src/app/` 폴더 = 경로 1개. 화면에서 SQLite·Capacitor 플러그인·`window`는 클라이언트 컴포넌트의 `useEffect` 안에서만 쓴다.
+- Next.js 16은 기존과 달라진 점이 많다. 새 API를 쓰기 전에 `node_modules/next/dist/docs/`의 해당 문서를 먼저 읽는다 (`AGENTS.md` 참고).
 - Capacitor(앱 ID `kr.co.prore.malsseumsup`): @capacitor-community/sqlite, local-notifications, @capacitor-community/admob, splash-screen, status-bar, app
 - 성경 본문: `public/bible/{ko,en}/{BOOK}.json`, 구조 `{ code, name, chapters: string[][] }`. 한국어 개역한글, 영어 KJV.
 - 규칙 로직은 `src/lib/`의 순수 함수(date, mission, streak, growth, ads, notify)로 만들고 단위 테스트를 둔다.
@@ -18,6 +19,10 @@
 - 기기 DB: `db/sqlite/001_init.sql`을 바꾸지 말고 그대로 실행한다. 스키마를 바꿔야 하면 `002_*.sql` 마이그레이션 파일을 새로 만들고 `PRAGMA user_version`을 올린다.
 - 서버 DB(`db/supabase/001_init.sql`)는 다음 업데이트(로그인·동기화·우리 포도원)용. MVP에서는 쓰지 않는다.
 - 성경 본문은 DB에 넣지 않는다.
+- SQL은 `src/lib/storage.ts`에만 둔다. DB 접근은 `SqlExecutor`(`src/lib/db/executor.ts`) 뒤에 있어서 앱은 Capacitor SQLite, 테스트는 Node 내장 SQLite(`tests/helpers/nodeExecutor.ts`)로 같은 코드를 돌린다.
+- `src/lib/db/migrations.generated.ts`는 `db/sqlite/*.sql`에서 `npm run gen:migrations`로 만든다(dev·build·test 전에 자동 실행). 직접 고치지 않는다.
+- 브라우저 개발용 SQLite wasm은 jeep-sqlite가 포함한 sql.js와 같은 시기 버전이어야 한다. `package.json`의 `overrides`로 `sql.js`를 1.12.0에 고정했으니 올리지 않는다(올리면 `LinkError`). `npm run dev` 때 `public/assets/`로 복사되고 빌드 때는 빠진다.
+- 전역 상태(`src/app/store.ts`)의 쓰기 작업은 한 줄로 처리한다(같은 진도를 동시에 읽고 써서 어긋나는 것을 막는다). 읽기→기도 흐름의 날짜(`activeDate`)는 메모리에만 두며, 앱을 끄거나 흐름을 떠나면 다음 날 이어서 완료할 수 없다.
 
 ## 디자인
 - 색·글꼴·모서리는 spec.md 3장 토큰만 사용. 색상값을 화면 코드에 직접 쓰지 않는다.

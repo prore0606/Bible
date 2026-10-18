@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import type { DayLog } from "@/app/types";
-import { greeting, progressPercent, stepsDone, todayRef, tomorrowRef } from "@/lib/home";
+import { greeting, isWilted, progressPercent, stepsDone, todayRef, tomorrowRef } from "@/lib/home";
 
 const GEN13 = { book: "GEN", chapter: 13 } as const;
 const log = (over: Partial<DayLog> = {}): DayLog => ({ date: "2026-10-18", ref: GEN13, revived: false, ...over });
@@ -54,5 +54,21 @@ describe("greeting", () => {
 
   it("0이면 첫 열매를 권한다", () => {
     expect(greeting(0)).toEqual({ text: "오늘 첫 열매를 맺어 볼까요?", streak: null });
+  });
+});
+
+describe("isWilted (어제를 놓쳤을 때 잎이 처짐)", () => {
+  it("어제를 놓쳤고 오늘 미션을 아직 안 마쳤으면 처진다 (시작 전·읽기 완료 모두)", () => {
+    expect(isWilted(true, "before")).toBe(true);
+    expect(isWilted(true, "read")).toBe(true);
+  });
+
+  it("오늘 미션을 마치면 바로 회복된다", () => {
+    expect(isWilted(true, "done")).toBe(false);
+  });
+
+  it("어제를 놓치지 않았으면 처지지 않는다", () => {
+    expect(isWilted(false, "before")).toBe(false);
+    expect(isWilted(false, "done")).toBe(false);
   });
 });

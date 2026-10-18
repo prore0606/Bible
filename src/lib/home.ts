@@ -25,6 +25,14 @@ export function tomorrowRef(progress: Progress): Ref {
   return progress.pendingNext ?? progress.next;
 }
 
+/**
+ * 포도나무 잎이 살짝 처지는 때: 어제를 놓쳤고 오늘 미션을 아직 마치지 않았을 때.
+ * 오늘 미션을 마치면 바로 회복되고(spec 7.3), 어제를 되살려도(연속이 이어져 놓친 게 아니게 됨) 처지지 않는다.
+ */
+export function isWilted(missedYesterday: boolean, mission: MissionStatus): boolean {
+  return missedYesterday && mission !== "done";
+}
+
 /** 인사 배너 문구. 연속 일수가 0이면 첫 열매를 권한다. */
 export function greeting(streak: number): { text: string; streak: number | null } {
   return streak > 0

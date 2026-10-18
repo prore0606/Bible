@@ -21,6 +21,7 @@ export default function ToastHost() {
     <div
       role="status"
       aria-live="polite"
+      aria-hidden={!visible}
       className={`pointer-events-none fixed bottom-[calc(150px+env(safe-area-inset-bottom))] left-1/2 z-30 -translate-x-1/2 whitespace-nowrap rounded-full bg-ink/90 px-4 py-2 text-[14px] text-bg transition-all duration-200 ${
         visible ? "translate-y-0 opacity-100" : "translate-y-2 opacity-0"
       }`}

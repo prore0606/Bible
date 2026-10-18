@@ -21,6 +21,7 @@
   --ink: #191f28;
   --gray: #8b95a1;
   --line: #eef0f3;
+  --scrim: rgba(30, 30, 25, 0.38); /* 바텀시트 뒤 어두운 배경 */
   color-scheme: light;
 }
 
@@ -79,6 +80,7 @@
   --color-ink: var(--ink);
   --color-gray: var(--gray);
   --color-line: var(--line);
+  --color-scrim: var(--scrim);
 
   /* 모서리: 카드 16, 버튼 14, 바텀시트 위 24 */
   --radius-card: 16px;
@@ -98,6 +100,24 @@
 }
 .scroll-hidden::-webkit-scrollbar {
   display: none;
+}
+
+/* 바텀시트가 아래에서 올라온다 (움직임을 줄이는 설정이면 생략) */
+@keyframes sheet-up {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0);
+  }
+}
+.animate-sheet-up {
+  animation: sheet-up 0.28s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .animate-sheet-up {
+    animation: none;
+  }
 }
 
 button {

@@ -32,6 +32,8 @@ export type AppState = {
    * 앱을 끄거나 흐름을 떠나면(leaveFlow) 사라지고, 다음 날 이어서 완료할 수 없다.
    */
   activeDate?: string;
+  /** 방금 완료한 미션 (메모리에만). 광고 관문과 완료 시트가 무엇을 완료했는지 알기 위해 쓴다. */
+  lastCompleted?: DayLog;
 
   init(): Promise<void>;
   refresh(): Promise<void>;
@@ -42,6 +44,11 @@ export type AppState = {
   finishReading(): Promise<void>;
   /** "기도 남기고 미션 완료" */
   completePrayer(prayer: string, linkedVerseId?: string): Promise<DayLog>;
+  /**
+   * /pray 진입: 기도를 이어서 쓸 수 있는 오늘 미션(읽기를 마쳤고 아직 완료 전)을 찾아 흐름을 잇는다.
+   * 없으면 undefined 이고, 화면이 /read 나 /home 으로 보낸다. 앱을 다시 켠 뒤에도 같은 날이면 이어진다.
+   */
+  resumePrayer(): Promise<DayLog | undefined>;
   /** 읽기·기도 화면을 떠날 때 (홈으로 등) */
   leaveFlow(): void;
   /** 구절을 저장하거나, 이미 저장돼 있으면 취소한다. 저장된 상태가 되면 true. */
@@ -157,9 +164,20 @@ export function createAppStore({ getStorage, now = () => new Date() }: StoreDeps
           const settings = await s.getSettings();
           const done = completeMission(log, prayer, linkedVerseId, now().toISOString(), settings);
           await s.saveCompletedMission(done.log, done.progress);
-          set({ activeDate: undefined });
+          set({ activeDate: undefined, lastCompleted: done.log });
           await load();
           return done.log;
+        }),
+
+      resumePrayer: () =>
+        enqueue(async () => {
+          const s = await storage();
+          const date = get().activeDate ?? toDateKey(now());
+          const log = await s.getDayLog(date);
+          if (!log || !log.readAt || log.completedAt) return undefined;
+          set({ activeDate: date });
+          await load();
+          return log;
         }),
 
       leaveFlow: () => set({ activeDate: undefined }),

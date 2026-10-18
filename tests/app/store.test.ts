@@ -304,3 +304,86 @@ describe("selectHomeSummary.canRevive", () => {
     expect(selectHomeSummary(store.getState(), clock)).toMatchObject({ missedYesterday: true, canRevive: false });
   });
 });
+
+describe("기도 이어서 쓰기 · 방금 완료한 미션 (T7)", () => {
+  it("읽기를 마친 뒤 resumePrayer 는 오늘 로그를 돌려주고 흐름을 잇는다", async () => {
+    const store = newStore();
+    await store.getState().init();
+    await store.getState().beginReading();
+    await store.getState().finishReading();
+    store.getState().leaveFlow();
+    const log = await store.getState().resumePrayer();
+    expect(log?.date).toBe("2026-10-18");
+    expect(store.getState().activeDate).toBe("2026-10-18");
+  });
+
+  it("앱을 다시 켜도(메모리 초기화) 같은 날이면 기도를 이어서 쓸 수 있다", async () => {
+    const first = newStore();
+    await first.getState().init();
+    await first.getState().beginReading();
+    await first.getState().finishReading();
+
+    const restarted = newStore();
+    await restarted.getState().init();
+    expect(restarted.getState().activeDate).toBeUndefined();
+    expect(await restarted.getState().resumePrayer()).toBeDefined();
+    const done = await restarted.getState().completePrayer("기도");
+    expect(done.completedAt).toBeDefined();
+  });
+
+  it("읽기 전에는 이어서 쓸 수 없다", async () => {
+    const store = newStore();
+    await store.getState().init();
+    await store.getState().beginReading();
+    expect(await store.getState().resumePrayer()).toBeUndefined();
+  });
+
+  it("미션 기록이 아예 없어도 undefined", async () => {
+    const store = newStore();
+    await store.getState().init();
+    expect(await store.getState().resumePrayer()).toBeUndefined();
+  });
+
+  it("이미 완료했으면 undefined (하루 1번)", async () => {
+    const store = newStore();
+    await store.getState().init();
+    await store.getState().beginReading();
+    await store.getState().finishReading();
+    await store.getState().completePrayer("기도");
+    expect(await store.getState().resumePrayer()).toBeUndefined();
+  });
+
+  it("어제 읽기만 하고 앱을 껐다가 다음 날 열면 어제 미션은 이어지지 않는다", async () => {
+    const first = newStore();
+    clock = at(2026, 10, 18, 23, 50);
+    await first.getState().init();
+    await first.getState().beginReading();
+    await first.getState().finishReading();
+
+    const next = newStore();
+    clock = at(2026, 10, 19, 8, 0);
+    await next.getState().init();
+    expect(await next.getState().resumePrayer()).toBeUndefined();
+  });
+
+  it("completePrayer 는 방금 완료한 미션을 lastCompleted 에 남긴다 (자정을 넘겨도 미션 날짜 그대로)", async () => {
+    const store = newStore();
+    clock = at(2026, 10, 18, 23, 50);
+    await store.getState().init();
+    await store.getState().beginReading();
+    await store.getState().finishReading();
+    clock = at(2026, 10, 19, 0, 10);
+    await store.getState().completePrayer("기도", undefined);
+    expect(store.getState().lastCompleted).toMatchObject({ date: "2026-10-18", prayer: "기도" });
+  });
+
+  it("저장한 구절을 연결해 완료하면 lastCompleted 에 연결 ID 가 남는다", async () => {
+    const store = newStore();
+    await store.getState().init();
+    await store.getState().beginReading();
+    await store.getState().finishReading();
+    await store.getState().toggleVerse({ ref: { book: "GEN", chapter: 1 }, verse: 3, text: "빛이 있으라" });
+    await store.getState().completePrayer("빛이 있게 하소서", "GEN.1.3");
+    expect(store.getState().lastCompleted?.linkedVerseId).toBe("GEN.1.3");
+  });
+});

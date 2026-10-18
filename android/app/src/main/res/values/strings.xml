@@ -4,4 +4,6 @@
     <string name="title_activity_main">성경-말씀숲</string>
     <string name="package_name">kr.co.prore.malsseumsup</string>
     <string name="custom_url_scheme">kr.co.prore.malsseumsup</string>
+    <!-- Google 공식 테스트 앱 ID. 출시 전에 AdMob 의 실제 앱 ID 로 바꾼다 (docs/ads-setup.md) -->
+    <string name="admob_app_id" translatable="false">ca-app-pub-3940256099942544~3347511713</string>
 </resources>

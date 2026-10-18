@@ -17,6 +17,7 @@
     "gen:fonts": "node scripts/gen-fonts.mjs"
   },
   "dependencies": {
+    "@capacitor-community/admob": "^8.2.1",
     "@capacitor-community/sqlite": "^8.1.1",
     "@capacitor/android": "^8.5.3",
     "@capacitor/app": "^8.1.2",

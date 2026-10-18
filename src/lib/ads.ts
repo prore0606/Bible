@@ -1,5 +1,13 @@
 // 광고 규칙 (docs/spec.md 9장). 광고는 읽기·기도 중간에는 절대 나오지 않고, 미션이 끝난 쉼표에서만 하루 1번 나온다.
-// 실제 AdMob 연결은 T13 에서 AdProvider 의 네이티브 구현으로 붙이고, 지금은 브라우저용 모의(mock) 구현만 둔다.
+// 앱(네이티브)에서는 AdMob(admobProvider.ts), 브라우저에서는 모의(mock) 구현을 쓴다.
+
+import { Capacitor } from "@capacitor/core";
+import { adConfig } from "@/lib/adIds";
+import { createAdMobApi } from "@/lib/admobApi";
+import { createNativeAdProvider } from "@/lib/admobProvider";
+
+/** 하단 탭바 높이(px). 네이티브 배너가 탭바 바로 위에 놓이도록 이만큼 띄운다. */
+const TAB_BAR_HEIGHT = 62;
 
 /** 전면 광고가 3초 안에 준비되지 않으면 건너뛰고 완료 화면으로 간다 */
 export const INTERSTITIAL_READY_TIMEOUT_MS = 3000;
@@ -25,6 +33,9 @@ export interface AdProvider {
   showInterstitial(): Promise<void>;
   /** 보상형 광고(놓친 날 되살리기). 끝까지 봐서 보상이 지급되면 true, 중간에 닫았거나 불러오지 못하면 false */
   showRewarded(): Promise<boolean>;
+  /** 기록 화면 하단 배너. 높이(px)가 정해지면 onHeight 로 알리고, 광고가 오지 않으면 0 을 알린다. mock 은 화면이 자리를 직접 그린다. */
+  showBanner(onHeight: (height: number) => void): Promise<void>;
+  removeBanner(): Promise<void>;
 }
 
 /**
@@ -81,8 +92,12 @@ export function createMockAdProvider(durationMs: number = MOCK_AD_DURATION_MS): 
     awaitInterstitialReady: () => Promise.resolve(true),
     showInterstitial: () => new Promise<void>((resolve) => setTimeout(resolve, durationMs)),
     showRewarded: () => new Promise<boolean>((resolve) => setTimeout(() => resolve(true), durationMs)),
+    showBanner: () => Promise.resolve(),
+    removeBanner: () => Promise.resolve(),
   };
 }
 
-/** 앱 전체에서 쓰는 광고 제공자. T13 에서 네이티브 플랫폼이면 AdMob 구현으로 바꾼다. */
-export const adProvider: AdProvider = createMockAdProvider();
+/** 앱 전체에서 쓰는 광고 제공자. 앱(네이티브)이면 AdMob, 브라우저(개발)면 모의 구현. */
+export const adProvider: AdProvider = Capacitor.isNativePlatform()
+  ? createNativeAdProvider(createAdMobApi(), adConfig, { bannerMargin: TAB_BAR_HEIGHT })
+  : createMockAdProvider();

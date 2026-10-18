@@ -2,12 +2,11 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
-import { appStore, useAppStore } from "@/app/store";
+import { appStore, selectHomeSummary, useAppStore } from "@/app/store";
 import { todayRef, tomorrowRef } from "@/lib/home";
 import { missionStatus } from "@/lib/mission";
 import { planNotifications } from "@/lib/notify";
 import { getNotificationPort, syncNotifications } from "@/lib/notifyScheduler";
-import { selectHomeSummary } from "@/app/store";
 
 /** 지금 저장소 상태로 7일치 알림을 다시 건다 (앱을 열 때·미션을 마칠 때·알림 설정을 바꿀 때·앱이 다시 열릴 때) */
 async function resync(): Promise<void> {

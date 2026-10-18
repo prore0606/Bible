@@ -12,6 +12,7 @@ import TimeWheel from "@/components/TimeWheel";
 import { Button, Screen } from "@/components/ui";
 import { PRIVACY_POLICY_URL } from "@/data/links";
 import { FONT_LABELS, FONT_PX, toggleLang, type FontSize } from "@/lib/reading";
+import { PERMISSION_BLOCKED_HINT, canEnable, ensurePermission, getNotificationPort } from "@/lib/notifyScheduler";
 import { formatRef } from "@/lib/ref";
 import {
   BIBLE_CREDIT,
@@ -47,6 +48,15 @@ export default function SettingsPage() {
       .updateSettings(patch)
       .catch(() => showToast("저장하지 못했어요. 다시 시도해 주세요"));
   const close = () => setSheet(null);
+  // 켤 때는 알림 권한을 확인한다. 막혀 있으면 켜지 않고 어디서 풀어야 하는지 알려 준다.
+  const toggleAlarm = async () => {
+    const enabled = !settings.alarm.enabled;
+    if (enabled && !canEnable(await ensurePermission(await getNotificationPort()))) {
+      showToast(PERMISSION_BLOCKED_HINT);
+      return;
+    }
+    await update({ alarm: { ...settings.alarm, enabled } });
+  };
 
   return (
     <Screen withTabBar>
@@ -66,7 +76,7 @@ export default function SettingsPage() {
           <Switch
             checked={settings.alarm.enabled}
             labelledBy="alarm-label"
-            onChange={() => update({ alarm: { ...settings.alarm, enabled: !settings.alarm.enabled } })}
+            onChange={() => void toggleAlarm()}
           />
         </div>
         <Row label="알림 시간" value={alarmTimeLabel(settings.alarm)} onClick={() => setSheet("time")} divider />

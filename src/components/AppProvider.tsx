@@ -6,6 +6,7 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { appStore, useAppStore } from "@/app/store";
 import NativeShell from "@/components/NativeShell";
+import NotificationSync from "@/components/NotificationSync";
 import SplashView from "@/components/SplashView";
 import ThemeApplier from "@/components/ThemeApplier";
 import ToastHost from "@/components/Toast";
@@ -17,6 +18,7 @@ export default function AppProvider({ children }: { children: React.ReactNode })
     <>
       <ThemeApplier />
       <NativeShell />
+      <NotificationSync />
       <AppGate>{children}</AppGate>
     </>
   );

@@ -6,10 +6,11 @@ import { appStore, useAppStore } from "@/app/store";
 import { Mascot } from "@/components/art/Mascot";
 import TimeWheel from "@/components/TimeWheel";
 import { BottomBar, Button, Heading, Screen } from "@/components/ui";
+import { canEnable, ensurePermission, getNotificationPort } from "@/lib/notifyScheduler";
 import { QUICK_TIMES, formatTime, fromWheel, toWheel, type WheelTime } from "@/lib/time";
 
 // 06 알림 시간 (2/2): 12시간제 휠로 고른 시간을 24시간제로 저장한다.
-// 알림 권한 요청과 예약은 알림 기능(T12)에서 이어 붙인다.
+// "이대로 시작할게요"는 알림 권한을 요청하고, 허용하지 않으면 알림을 끈 채로 시작한다. 예약은 NotificationSync 가 한다.
 export default function SetupAlarmPage() {
   const router = useRouter();
   const alarm = useAppStore((s) => s.settings?.alarm);
@@ -23,7 +24,8 @@ export default function SetupAlarmPage() {
     setSaving(true);
     setError(undefined);
     try {
-      await appStore.getState().updateSettings({ alarm: { enabled, hour, minute } });
+      const allowed = enabled && canEnable(await ensurePermission(await getNotificationPort()));
+      await appStore.getState().updateSettings({ alarm: { enabled: allowed, hour, minute } });
       router.push("/seed/");
     } catch (e) {
       setError(e instanceof Error ? e.message : "저장하지 못했어요. 다시 시도해 주세요.");

@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">성경-말씀숲</string>
+    <string name="title_activity_main">성경-말씀숲</string>
+    <string name="package_name">kr.co.prore.malsseumsup</string>
+    <string name="custom_url_scheme">kr.co.prore.malsseumsup</string>
+</resources>

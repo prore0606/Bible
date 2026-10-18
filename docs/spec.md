@@ -118,7 +118,8 @@ malsseumsup/
 | 모서리 | 카드 16px, 버튼 14px, 바텀시트 위쪽 24px, 칩 999px |
 | 간격 | 화면 좌우 여백 16px, 카드 사이 8px |
 | 그림자 | 카드: 0 1px 2px rgba(0,0,0,.03), 0 4px 14px rgba(0,0,0,.04) 한 가지만 |
-| 다크 테마 | 배경 #17171C, 카드 #222228, blue #4C93FF, green #4CC38A, butter #2E2A20 |
+| 다크 테마 | 배경 #17171C, 카드 #222228, blue #4C93FF, green #4CC38A, butter #2E2A20 (여기까지 디자인 기준). 나머지는 T10에서 글자 대비 4.5 이상이 되도록 정함: ink #F2F4F6, gray #9AA3AE, line #2E2E36, blue-tint #1D2B44, green-light #1C3A2C, highlight #4A4220, grape(글자) #A58BF0, grape-light(달력 완료 칸) #7C5CDB. 근거: `docs/contrast.md` |
+| 역할 토큰 | `on-blue`(파란 배경 위 글자: 밝은 테마 #FFFFFF, 다크 #0B1A33), `grape-solid`(흰 글자가 올라가는 보라 채움 #7C5CDB), `scrim`(바텀시트 뒤 배경 rgba(30,30,25,.38)) |
 
 - **마스코트 '알알이'**와 포도원 그림은 `design/screens.html`의 SVG(`#mascot`, `vineG()`)를 컴포넌트로 옮겨 씁니다. 새로 그리지 않습니다.
 

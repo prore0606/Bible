@@ -38,6 +38,9 @@
 - 토스트는 `showToast("...")`(`src/app/toast.ts`), 본문 목록은 `VerseList`(읽기·자유 읽기 공용), 읽기·홈 규칙은 `src/lib/reading.ts`·`home.ts`(순수 함수 + 테스트).
 - React 린트(react-hooks)가 effect 안의 동기 `setState`와 `ref`라는 이름의 prop 접근을 막는다. 상태는 콜백/파생값으로, 위치 같은 prop은 `at` 등 다른 이름으로 쓴다.
 - 브라우저 확인(Playwright) 때는 선택자가 2개 이상에 걸리면 클릭이 재시도되어 엉뚱한 곳이 눌릴 수 있다. 고유한 선택자나 `evaluate`로 누른다.
+- 색 토큰은 **역할로 쓴다**: 파란 배경 위 글자는 `text-on-blue`(흰색 `text-white` 금지 — 다크에서 대비 3.0), 흰 글자가 올라가는 보라 채움은 `bg-grape-solid`, 글자용 보라는 `text-grape`. 대비 측정과 밝은 테마의 낮은 조합(D-27)은 `docs/contrast.md`.
+- 테마: 고른 값은 SQLite와 localStorage 양쪽에 둔다(첫 화면 깜빡임 방지, `src/lib/theme.ts`의 `themeInitScript`가 `<head>`에서 실행). `data-theme` 을 직접 만지지 말고 `applyTheme()`을 쓴다.
+- 시트 안의 확인 버튼은 `SheetFooter`에 넣는다(긴 시트에서도 항상 보이게).
 - 경로 보호는 `src/lib/routeGuard.ts`(첫 실행 전에는 01~07 화면만, 마친 뒤에는 온보딩·시작 설정 화면 차단). `AppProvider`가 저장소를 연 뒤에만 화면을 보여 준다.
 
 ## 핵심 규칙

@@ -58,7 +58,7 @@ export default function BookPicker({ value, onChange }: { value: Ref; onChange: 
               aria-pressed={on}
               onClick={() => onChange(pickBook(b.code))}
               className={`rounded-full border-[1.5px] px-3 py-1.5 text-[14px] ${
-                on ? "border-blue bg-blue font-bold text-white" : "border-line bg-card text-ink/80"
+                on ? "border-blue bg-blue font-bold text-on-blue" : "border-line bg-card text-ink/80"
               }`}
             >
               {b.ko}
@@ -84,7 +84,7 @@ export default function BookPicker({ value, onChange }: { value: Ref; onChange: 
               aria-label={`${c}장`}
               onClick={() => onChange(pickChapter(value, c))}
               className={`aspect-square rounded-[11px] text-[14px] font-semibold shadow-card ${
-                on ? "bg-blue text-white" : "bg-card text-ink/80"
+                on ? "bg-blue text-on-blue" : "bg-card text-ink/80"
               }`}
             >
               {c}

@@ -185,7 +185,7 @@ function MissionRow({
       <span
         aria-hidden="true"
         className={`flex h-[22px] w-[22px] shrink-0 items-center justify-center rounded-full ${
-          checked ? "bg-blue text-white" : "border-2 border-gray/40"
+          checked ? "bg-blue text-on-blue" : "border-2 border-gray/40"
         }`}
       >
         {checked && (

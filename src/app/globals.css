@@ -14,6 +14,10 @@
   --gold: #ffb938;
   --grape: #7c5cdb;
   --grape-light: #a58bf0;
+  /* 흰 글자가 올라가는 보라 채움(버튼·오늘 칸). --grape 는 글자·아이콘용이라 다크에서 밝아진다 */
+  --grape-solid: #7c5cdb;
+  /* 파란 배경 위 글자색. 다크의 파랑(#4c93ff)은 밝아서 흰 글자 대비가 3.0 뿐이라 어두운 글자를 쓴다 */
+  --on-blue: #ffffff;
   --bg: #f4f5f7;
   --card: #ffffff;
   --cream-1: #fff8ec;
@@ -40,6 +44,9 @@
     --ink: #f2f4f6;
     --gray: #9aa3ae;
     --line: #2e2e36;
+    --grape: #a58bf0; /* 글자: 카드 위 대비 5.7 */
+    --grape-light: #7c5cdb; /* 달력의 완료 칸 (흰 숫자 대비 4.8) */
+    --on-blue: #0b1a33; /* 파란 버튼 글자 (대비 5.7) */
     color-scheme: dark;
   }
 }
@@ -57,6 +64,9 @@
   --ink: #f2f4f6;
   --gray: #9aa3ae;
   --line: #2e2e36;
+  --grape: #a58bf0; /* 글자: 카드 위 대비 5.7 */
+  --grape-light: #7c5cdb; /* 달력의 완료 칸 (흰 숫자 대비 4.8) */
+  --on-blue: #0b1a33; /* 파란 버튼 글자 (대비 5.7) */
   color-scheme: dark;
 }
 
@@ -73,6 +83,8 @@
   --color-gold: var(--gold);
   --color-grape: var(--grape);
   --color-grape-light: var(--grape-light);
+  --color-grape-solid: var(--grape-solid);
+  --color-on-blue: var(--on-blue);
   --color-bg: var(--bg);
   --color-card: var(--card);
   --color-cream-1: var(--cream-1);

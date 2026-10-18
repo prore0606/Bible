@@ -112,7 +112,7 @@ function RecordsView() {
                 type="button"
                 onClick={revive}
                 disabled={adBusy}
-                className="shrink-0 rounded-full bg-grape px-4 py-2 text-[14px] font-bold text-white disabled:opacity-50"
+                className="shrink-0 rounded-full bg-grape-solid px-4 py-2 text-[14px] font-bold text-white disabled:opacity-50"
               >
                 ▶ 되살리기
               </button>
@@ -219,7 +219,7 @@ function CalendarCard({
               className={`flex aspect-square items-center justify-center rounded-[8px] text-[11px] font-semibold ${
                 cell.status === "completed"
                   ? cell.isToday
-                    ? "bg-grape text-white"
+                    ? "bg-grape-solid text-white"
                     : "bg-grape-light text-white"
                   : cell.status === "revived"
                     ? "border-2 border-grape-light text-grape"

@@ -6,11 +6,21 @@ import { usePathname, useRouter } from "next/navigation";
 import { useEffect } from "react";
 import { appStore, useAppStore } from "@/app/store";
 import SplashView from "@/components/SplashView";
+import ThemeApplier from "@/components/ThemeApplier";
 import ToastHost from "@/components/Toast";
 import { Button, Screen } from "@/components/ui";
 import { guardTarget } from "@/lib/routeGuard";
 
 export default function AppProvider({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <ThemeApplier />
+      <AppGate>{children}</AppGate>
+    </>
+  );
+}
+
+function AppGate({ children }: { children: React.ReactNode }) {
   const status = useAppStore((s) => s.status);
   const error = useAppStore((s) => s.error);
   const onboarded = useAppStore((s) => s.settings?.onboarded);

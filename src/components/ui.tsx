@@ -7,7 +7,7 @@ export function Button({ variant = "primary", className = "", type = "button", .
   const base = "flex w-full items-center justify-center font-sans transition-opacity disabled:opacity-40";
   const styles =
     variant === "primary"
-      ? "h-14 rounded-button bg-blue text-[17px] font-bold text-white active:opacity-90"
+      ? "h-14 rounded-button bg-blue text-[17px] font-bold text-on-blue active:opacity-90"
       : "h-11 rounded-button text-[15px] font-medium text-gray";
   return <button type={type} className={`${base} ${styles} ${className}`} {...rest} />;
 }

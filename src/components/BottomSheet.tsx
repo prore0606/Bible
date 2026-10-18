@@ -27,7 +27,7 @@ export default function BottomSheet({ label, onClose, children }: Props) {
         role="dialog"
         aria-modal="true"
         aria-label={label}
-        className="animate-sheet-up relative w-full max-w-[480px] rounded-t-sheet bg-card px-5 pt-3 pb-[calc(20px+env(safe-area-inset-bottom))]"
+        className="animate-sheet-up relative max-h-[90dvh] w-full max-w-[480px] overflow-y-auto rounded-t-sheet bg-card px-5 pt-3 pb-[calc(20px+env(safe-area-inset-bottom))]"
       >
         <div className="mx-auto mb-4 h-1 w-8 rounded-full bg-line" aria-hidden="true" />
         <button
@@ -40,6 +40,18 @@ export default function BottomSheet({ label, onClose, children }: Props) {
         </button>
         {children}
       </div>
+    </div>
+  );
+}
+
+/**
+ * 시트 맨 아래에 붙는 버튼 영역. 시트 내용이 길어 스크롤되어도 버튼은 항상 화면 아래에 보인다
+ * (시트 아래 여백만큼 음수 여백을 줘서, 스크롤 영역의 맨 아래에 딱 붙는다).
+ */
+export function SheetFooter({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="sticky bottom-0 -mb-[calc(20px+env(safe-area-inset-bottom))] bg-card pt-3 pb-[calc(20px+env(safe-area-inset-bottom))]">
+      {children}
     </div>
   );
 }
